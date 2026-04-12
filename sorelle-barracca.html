@@ -114,6 +114,21 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
 [data-d="1"]{transition-delay:.1s}
 [data-d="2"]{transition-delay:.2s}
 [data-d="3"]{transition-delay:.3s}
+.co-hero-layout{display:flex;flex-direction:column;gap:40px;align-items:flex-start;position:relative;z-index:1;width:100%;padding-bottom:60px;padding-top:48px}
+@media(min-width:900px){.co-hero-layout{flex-direction:row;align-items:center;gap:64px}}
+.co-hero-inner{flex:1;min-width:0}
+.co-hero-img{flex-shrink:0;width:100%;max-width:380px;aspect-ratio:4/3;border-radius:20px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(135deg,var(--card),var(--deep));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
+.co-hero-img::before{content:'';position:absolute;inset:0;background:rgba(20,80,70,1);opacity:.15}
+.co-img-letter{font-family:var(--ff-d);font-size:8rem;font-weight:900;font-style:italic;color:var(--gold);opacity:.18;line-height:1;position:absolute}
+.co-img-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);position:relative;z-index:1}
+.nav-drop{position:relative}
+.nav-drop>a::after{content:' ▾';font-size:8px;opacity:.6}
+.nav-drop-menu{display:none;position:absolute;top:100%;left:-12px;background:rgba(7,8,10,.97);border:1px solid var(--border);border-radius:12px;min-width:196px;padding-top:16px;padding-bottom:6px;padding-left:6px;padding-right:6px;z-index:900;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.nav-drop-menu::before{content:'';position:absolute;top:-16px;left:0;right:0;height:16px}
+.nav-drop:hover .nav-drop-menu{display:block}
+.nav-drop-menu li{list-style:none}
+.nav-drop-menu a{display:block;padding:9px 14px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-radius:8px;transition:all .2s;font-weight:500}
+.nav-drop-menu a:hover{background:var(--gold-dim);color:var(--gold)}
 </style>
 </head>
 <body>
@@ -123,7 +138,18 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
   <a href="/" class="nav-logo">Lorenzo <span>Attinà</span></a>
   <ul class="nav-links">
     <li><a href="/#settori">Settori</a></li>
-    <li><a href="/#aziende">Aziende</a></li>
+    <li class="nav-drop">
+      <a href="/#aziende">Aziende</a>
+      <ul class="nav-drop-menu">
+        <li><a href="/emiltecnica">EmilTecnica</a></li>
+        <li><a href="/mbm-project">MBM Project</a></li>
+        <li><a href="/tecnocart">Tecnocart</a></li>
+        <li><a href="/apple-promo">Apple Promo</a></li>
+        <li><a href="/dataspeed">Dataspeed</a></li>
+        <li><a href="/sorelle-barracca">Sorelle Barracca</a></li>
+        <li><a href="/effezetadue">Effezetadue</a></li>
+      </ul>
+    </li>
     <li><a href="/#cataloghi">Cataloghi</a></li>
     <li><a href="/#contatti">Contatti</a></li>
   </ul>
@@ -134,14 +160,20 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="hero-grid"></div>
-  <div class="co-hero-inner">
-    <a href="/" class="co-back">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
-      Torna alla home
-    </a>
-    <div class="co-tag">Forniture Ufficio · Arredo · Cancelleria</div>
-    <h1>Sorelle <em>Barracca</em></h1>
-    <p>Tutto ciò che serve per l'ufficio: carta, arredo, cancelleria, materiali di consumo e prodotti per la gestione quotidiana degli spazi di lavoro.</p>
+  <div class="co-hero-layout">
+    <div class="co-hero-inner">
+      <a href="/" class="co-back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+        Torna alla home
+      </a>
+      <div class="co-tag">Forniture Ufficio · Arredo · Cancelleria</div>
+      <h1>Sorelle <em>Barracca</em></h1>
+      <p>Tutto ciò che serve per l'ufficio: carta, arredo, cancelleria, materiali di consumo e prodotti per la gestione quotidiana degli spazi di lavoro.</p>
+    </div>
+    <div class="co-hero-img">
+      <div class="co-img-letter">S</div>
+      <div class="co-img-label">Sorelle Barracca</div>
+    </div>
   </div>
 </section>
 
