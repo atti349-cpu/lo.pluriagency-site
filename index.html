@@ -214,6 +214,19 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
 .rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
 .rv.in{opacity:1;transform:none}
 .rv[data-d="1"]{transition-delay:.1s}.rv[data-d="2"]{transition-delay:.2s}.rv[data-d="3"]{transition-delay:.3s}.rv[data-d="4"]{transition-delay:.4s}
+
+/* NAV DROPDOWN */
+.nav-drop{position:relative}
+.nav-drop>a::after{content:' ▾';font-size:8px;opacity:.6}
+.nav-drop-menu{display:none;position:absolute;top:calc(100% + 10px);left:-12px;background:rgba(7,8,10,.97);border:1px solid var(--border);border-radius:12px;min-width:196px;padding:6px;z-index:900;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.nav-drop:hover .nav-drop-menu{display:block}
+.nav-drop-menu li{list-style:none}
+.nav-drop-menu a{display:block;padding:9px 14px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-radius:8px;transition:all .2s;font-weight:500}
+.nav-drop-menu a:hover{background:var(--gold-dim);color:var(--gold)}
+
+/* AZ-TILE CON LOGO */
+.az-logo{width:48px;height:48px;border-radius:12px;background:var(--gold-dim);border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:1.3rem;font-weight:900;color:var(--gold);margin-bottom:10px;flex-shrink:0;transition:background .25s}
+.az-tile:hover .az-logo{background:rgba(212,168,67,.22)}
 </style>
 </head>
 <body>
@@ -222,7 +235,18 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
   <a class="nav-logo" href="#hero">Lorenzo <span>Attinà</span></a>
   <ul class="nav-links">
     <li><a href="#settori">Settori</a></li>
-    <li><a href="#aziende">Aziende</a></li>
+    <li class="nav-drop">
+      <a href="#aziende">Aziende</a>
+      <ul class="nav-drop-menu">
+        <li><a href="/emiltecnica">EmilTecnica</a></li>
+        <li><a href="/mbm-project">MBM Project</a></li>
+        <li><a href="/tecnocart">Tecnocart</a></li>
+        <li><a href="/apple-promo">Apple Promo</a></li>
+        <li><a href="/dataspeed">Dataspeed</a></li>
+        <li><a href="/sorelle-barracca">Sorelle Barracca</a></li>
+        <li><a href="/effezetadue">Effezetadue</a></li>
+      </ul>
+    </li>
     <li><a href="#cataloghi">Cataloghi</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
@@ -271,8 +295,8 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
       </div>
       <div class="rv" data-d="2">
         <div class="stats-row">
-          <div class="stat"><div class="stat-n">7+</div><div class="stat-l">Settori</div></div>
-          <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Aziende</div></div>
+          <div class="stat"><div class="stat-n">7</div><div class="stat-l">Settori</div></div>
+          <div class="stat"><div class="stat-n">7+</div><div class="stat-l">Partner</div></div>
           <div class="stat"><div class="stat-n">1</div><div class="stat-l">Interlocutore</div></div>
         </div>
       </div>
@@ -367,13 +391,13 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
       <p class="body-t" style="margin-top:14px;max-width:480px">Ogni settore è coperto da un fornitore di eccellenza — io li coordino tutti per te.</p>
     </div>
     <div class="az-grid">
-      <a class="az-tile rv" data-d="1" href="/tecnocart"><span class="az-tag">Imballaggi</span><span class="az-name">Tecnocart</span></a>
-      <a class="az-tile rv" data-d="2" href="/mbm-project"><span class="az-tag">Saldatura</span><span class="az-name">MBM Project</span></a>
-      <a class="az-tile rv" data-d="3" href="/emiltecnica"><span class="az-tag">DPI & Utensili</span><span class="az-name">EmilTecnica</span></a>
-      <a class="az-tile rv" data-d="4" href="/apple-promo"><span class="az-tag">Abbigliamento & Gadget</span><span class="az-name">Apple Promo</span></a>
-      <a class="az-tile rv" data-d="1" href="/dataspeed"><span class="az-tag">Schermi & Tecnologia</span><span class="az-name">Dataspeed</span></a>
-      <a class="az-tile rv" data-d="2" href="/effezetadue"><span class="az-tag">Stampanti & Toner</span><span class="az-name">Effezetadue</span></a>
-      <a class="az-tile rv" data-d="3" href="/sorelle-barracca"><span class="az-tag">Forniture Ufficio</span><span class="az-name">Sorelle Barracca</span></a>
+      <a class="az-tile rv" data-d="1" href="/tecnocart"><div class="az-logo">T</div><span class="az-tag">Imballaggi</span><span class="az-name">Tecnocart</span></a>
+      <a class="az-tile rv" data-d="2" href="/mbm-project"><div class="az-logo">M</div><span class="az-tag">Saldatura</span><span class="az-name">MBM Project</span></a>
+      <a class="az-tile rv" data-d="3" href="/emiltecnica"><div class="az-logo">E</div><span class="az-tag">DPI & Utensili</span><span class="az-name">EmilTecnica</span></a>
+      <a class="az-tile rv" data-d="4" href="/apple-promo"><div class="az-logo">A</div><span class="az-tag">Abbigliamento & Gadget</span><span class="az-name">Apple Promo</span></a>
+      <a class="az-tile rv" data-d="1" href="/dataspeed"><div class="az-logo">D</div><span class="az-tag">Schermi & Tecnologia</span><span class="az-name">Dataspeed</span></a>
+      <a class="az-tile rv" data-d="2" href="/effezetadue"><div class="az-logo">F</div><span class="az-tag">Stampanti & Toner</span><span class="az-name">Effezetadue</span></a>
+      <a class="az-tile rv" data-d="3" href="/sorelle-barracca"><div class="az-logo">S</div><span class="az-tag">Forniture Ufficio</span><span class="az-name">Sorelle Barracca</span></a>
     </div>
   </div>
 </section>
