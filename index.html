@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorenzo Attinà – Consulenza Commerciale Multisettoriale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07080a;
+  --deep:#0e1117;
+  --card:#13161d;
+  --border:rgba(255,255,255,0.07);
+  --gold:#d4a843;
+  --gold2:#f0c960;
+  --gold-dim:rgba(212,168,67,0.13);
+  --cream:#f2ebe0;
+  --muted:rgba(242,235,224,0.45);
+  --muted2:rgba(242,235,224,0.22);
+  --ff-d:'Playfair Display',Georgia,serif;
+  --ff-b:'Syne',sans-serif;
+  --nav-h:64px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-b);background:var(--black);color:var(--cream);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--ff-b);cursor:pointer;border:none;background:none}
+svg{display:block}
+
+.label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.label::before{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0}
+.h2{font-family:var(--ff-d);font-size:clamp(2.1rem,5.5vw,4rem);font-weight:700;line-height:1.05;color:#fff}
+.h2 em{font-style:italic;color:var(--gold)}
+.body-t{font-size:15px;line-height:1.8;color:var(--muted);font-weight:300}
+.px{padding-left:24px;padding-right:24px}
+@media(min-width:768px){.px{padding-left:52px;padding-right:52px}}
+@media(min-width:1280px){.px{padding-left:88px;padding-right:88px}}
+section{padding:96px 0}
+
+/* grain */
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.4}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(7,8,10,.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+@media(min-width:768px){nav{padding:0 52px}}
+.nav-logo{font-family:var(--ff-d);font-size:17px;font-weight:700;color:#fff}
+.nav-logo span{color:var(--gold);font-style:italic}
+.nav-links{display:none;gap:32px;list-style:none}
+.nav-links a{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s;font-weight:500}
+.nav-links a:hover{color:var(--gold)}
+@media(min-width:900px){.nav-links{display:flex}}
+
+/* FLOATING CTA */
+.cta-float{position:fixed;bottom:28px;right:22px;z-index:700;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.cta-pill{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:50px;font-size:13px;font-weight:600;letter-spacing:.04em;transition:transform .2s,box-shadow .2s;white-space:nowrap}
+.cta-pill:hover{transform:translateY(-2px)}
+.cta-primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);box-shadow:0 4px 28px rgba(212,168,67,.38)}
+.cta-primary:hover{box-shadow:0 8px 36px rgba(212,168,67,.55)}
+.mob-only{display:flex}.desk-only{display:none}
+@media(min-width:768px){.mob-only{display:none}.desk-only{display:flex}}
+
+/* HERO */
+#hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:var(--nav-h);position:relative;overflow:hidden;background:var(--black)}
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(212,168,67,.16) 0%,transparent 70%);top:-10%;left:-15%;animation:d1 12s ease-in-out infinite}
+.orb-2{width:380px;height:380px;background:radial-gradient(circle,rgba(160,100,10,.1) 0%,transparent 70%);bottom:10%;right:-8%;animation:d2 15s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,28px)}}
+@keyframes d2{0%,100%{transform:translate(0,0)}50%{transform:translate(-28px,-18px)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,168,67,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,.04) 1px,transparent 1px);background-size:80px 80px}
+
+.hero-inner{display:flex;flex-direction:column;align-items:center;z-index:1;width:100%}
+.hero-photo{width:200px;height:260px;border-radius:120px 120px 0 0;overflow:hidden;border:1.5px solid rgba(212,168,67,.3);border-bottom:none;background:var(--card);flex-shrink:0}
+.hero-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(212,168,67,.3)}
+.hero-ph small{font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+
+.hero-text{text-align:center;padding:28px 24px 60px}
+.hero-name{font-family:var(--ff-d);font-size:clamp(3rem,11vw,7.5rem);font-weight:900;line-height:.92;color:#fff;letter-spacing:-.02em}
+.hero-name .sn{display:block;font-style:italic;background:linear-gradient(90deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:clamp(3.4rem,13vw,8.5rem)}
+.hero-sub{margin-top:20px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+.scroll-arr{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:rgba(212,168,67,.32);animation:bob 2.5s ease-in-out infinite;font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+@media(min-width:900px){
+  #hero{flex-direction:row;align-items:flex-end;justify-content:center;gap:72px;padding:var(--nav-h) 52px 0}
+  .hero-inner{flex-direction:row;align-items:flex-end;gap:72px}
+  .hero-photo{width:280px;height:360px}
+  .hero-text{text-align:left;padding:0 0 64px}
+}
+
+/* MANIFESTO */
+#manifesto{background:var(--deep);padding:64px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.mani-inner{display:grid;grid-template-columns:1fr;gap:44px}
+@media(min-width:768px){.mani-inner{grid-template-columns:1fr 1fr;align-items:center;gap:64px}}
+.mani-inner .h2{margin:14px 0 18px}
+.stats-row{display:flex;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.stat{flex:1;padding:28px 16px;border-right:1px solid var(--border);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--ff-d);font-size:2.6rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* SETTORI */
+#settori{background:var(--black);padding:96px 0}
+.sectors-head{margin-bottom:36px}
+.sectors-head .h2{margin:14px 0 16px}
+.scroll-btns{display:flex;gap:8px;margin-top:16px}
+.scr-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.scr-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+.sectors-wrap{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sectors-wrap::-webkit-scrollbar{display:none}
+.sectors-row{display:flex;gap:16px;padding:8px 24px 16px;width:max-content}
+@media(min-width:768px){.sectors-row{padding:8px 52px 16px;gap:20px}}
+
+.sc{scroll-snap-align:start;width:252px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px 24px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s,background .3s}
+.sc::before{content:'';position:absolute;inset:-1px;border-radius:17px;background:linear-gradient(135deg,rgba(212,168,67,.18),transparent 55%);opacity:0;transition:opacity .3s;pointer-events:none}
+.sc:hover{transform:translateY(-4px);border-color:rgba(212,168,67,.35);background:#161921}
+.sc:hover::before{opacity:1}
+.sc-num{position:absolute;top:18px;right:20px;font-family:var(--ff-d);font-size:3.5rem;font-weight:900;color:rgba(212,168,67,.06);line-height:1;font-style:italic;pointer-events:none}
+.sc-icon{width:48px;height:48px;border-radius:12px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--gold);flex-shrink:0}
+.sc-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sc-name{font-family:var(--ff-d);font-size:1.22rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.25}
+.sc-desc{font-size:13px;line-height:1.75;color:var(--muted);font-weight:300}
+
+/* AZIENDE */
+#aziende{background:var(--deep);padding:96px 0}
+.az-head .h2{margin:14px 0 16px}
+.az-grid{display:grid;gap:12px;margin-top:40px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:600px){.az-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.az-grid{grid-template-columns:repeat(4,1fr);gap:16px}}
+.az-tile{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:all .25s}
+.az-tile:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
+.az-tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);padding:3px 10px;border-radius:20px}
+.az-name{font-family:var(--ff-d);font-size:.95rem;font-weight:700;color:#fff;line-height:1.2}
+
+/* CATALOGHI */
+#cataloghi{background:var(--black);padding:96px 0}
+.cat-head{display:flex;flex-direction:column;gap:24px;margin-bottom:40px}
+@media(min-width:768px){.cat-head{flex-direction:row;align-items:flex-end;justify-content:space-between}}
+.cat-head-txt .h2{margin:14px 0 12px}
+.up-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:transparent;border:1px solid rgba(212,168,67,.4);color:var(--gold);border-radius:50px;font-size:13px;font-weight:600;letter-spacing:.06em;transition:all .2s;white-space:nowrap;align-self:flex-start;cursor:pointer}
+.up-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
+.up-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.cat-list{display:flex;flex-direction:column;gap:14px}
+@media(min-width:700px){.cat-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}}
+@media(min-width:1000px){.cat-list{grid-template-columns:repeat(3,1fr)}}
+
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
+.cat-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
+.cat-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border)}
+.ct-ico{color:rgba(212,168,67,.25)}
+.ct-ico svg{width:48px;height:48px;stroke:currentColor;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.ct-lbl{position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:rgba(212,168,67,.1);padding:3px 10px;border-radius:20px;border:1px solid rgba(212,168,67,.15)}
+.cat-body{padding:18px 18px 20px;flex:1;display:flex;flex-direction:column;gap:12px}
+.cat-title{font-family:var(--ff-d);font-size:1.05rem;font-weight:700;color:#fff;line-height:1.25}
+.cat-dl{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:9px 16px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
+.cat-dl:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
+.cat-dl svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cat-add{border:1.5px dashed rgba(212,168,67,.18);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:14px;color:var(--muted2);cursor:pointer;padding:40px 20px;transition:border-color .2s,color .2s;min-height:140px}
+.cat-add:hover{border-color:rgba(212,168,67,.45);color:var(--gold)}
+.cat-add svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cat-add span{font-size:12px;letter-spacing:.06em;text-align:center}
+
+/* CONTATTI */
+#contatti{background:var(--deep);padding:96px 0}
+.contact-layout{display:grid;grid-template-columns:1fr;gap:60px;margin-top:48px}
+@media(min-width:900px){.contact-layout{grid-template-columns:1fr 1fr;align-items:start;gap:80px}}
+
+.step-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.step-lbl span{color:var(--gold);font-weight:700}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.chip{padding:9px 16px;border-radius:50px;font-size:12px;font-weight:600;letter-spacing:.04em;border:1px solid var(--border);color:var(--muted);background:var(--card);cursor:pointer;transition:all .2s;user-select:none;display:inline-flex;align-items:center;gap:7px}
+.chip svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.chip:hover{border-color:rgba(212,168,67,.38);color:var(--cream)}
+.chip.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+.mini-fields{display:flex;flex-direction:column;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.row2{grid-template-columns:1fr}}
+.mf{display:flex;flex-direction:column;gap:6px}
+.mf label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2)}
+.mf input,.mf textarea{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:#fff;font-family:var(--ff-b);font-size:14px;font-weight:300;outline:none;transition:border-color .2s;width:100%}
+.mf input:focus,.mf textarea:focus{border-color:rgba(212,168,67,.5)}
+.mf textarea{resize:none;min-height:100px}
+input::placeholder,textarea::placeholder{color:var(--muted2)}
+
+.send-btn{width:100%;margin-top:18px;padding:16px 24px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);border-radius:50px;font-family:var(--ff-b);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(212,168,67,.28);cursor:pointer;border:none}
+.send-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(212,168,67,.45)}
+.send-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+.c-info{display:flex;flex-direction:column;gap:16px}
+.c-title{font-family:var(--ff-d);font-size:1.6rem;font-weight:700;font-style:italic;color:#fff;margin-bottom:8px;line-height:1.2}
+.c-item{display:flex;align-items:center;gap:16px;padding:18px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px;transition:border-color .2s}
+.c-item:hover{border-color:rgba(212,168,67,.28)}
+.c-ico{width:44px;height:44px;border-radius:10px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold)}
+.c-ico svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.c-ico.wa{background:rgba(37,211,102,.1);color:#25d366}
+.c-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:3px}
+.c-val{font-size:15px;color:var(--cream);font-weight:400;transition:color .2s}
+.c-item:hover .c-val{color:var(--gold)}
+
+/* FOOTER */
+footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.f-logo{font-family:var(--ff-d);font-size:1.1rem;font-weight:700;font-style:italic;color:var(--gold);margin-bottom:8px}
+.f-copy{font-size:11px;color:var(--muted2);letter-spacing:.06em}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.rv.in{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.1s}.rv[data-d="2"]{transition-delay:.2s}.rv[data-d="3"]{transition-delay:.3s}.rv[data-d="4"]{transition-delay:.4s}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#hero">Lorenzo <span>Attinà</span></a>
+  <ul class="nav-links">
+    <li><a href="#settori">Settori</a></li>
+    <li><a href="#aziende">Aziende</a></li>
+    <li><a href="#cataloghi">Cataloghi</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+</nav>
+
+<div class="cta-float">
+  <a class="cta-pill cta-primary mob-only" href="#" id="vcardBtn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+    Salva Contatto
+  </a>
+  <a class="cta-pill cta-primary desk-only" href="mailto:hello@pluriagency.com?subject=Richiesta%20Informazioni&body=Salve%20Lorenzo%2C%0A%0Ami%20chiamo%20[Nome]%20e%20vorrei%20ricevere%20informazioni%20su...">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+    Scrivimi
+  </a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-photo">
+      <img src="assets/img/lorenzo.jpg" alt="Lorenzo Attinà">
+    </div>
+    <div class="hero-text">
+      <div class="label" style="margin-bottom:14px">Consulente Commerciale</div>
+      <h1 class="hero-name">Lorenzo<span class="sn">Attinà</span></h1>
+      <p class="hero-sub">Consulenza Commerciale &nbsp;·&nbsp; Multisettoriale</p>
+    </div>
+  </div>
+  <div class="scroll-arr">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Scopri
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="px">
+    <div class="mani-inner">
+      <div class="rv">
+        <div class="label">Chi sono</div>
+        <h2 class="h2">Un unico punto di riferimento, <em>molti settori</em></h2>
+        <p class="body-t" style="margin-top:16px">Rappresento aziende leader in più comparti merceologici, offrendo alle imprese clienti un interlocutore unico. Raggruppo il meglio di ogni settore sotto un unico cappello.</p>
+      </div>
+      <div class="rv" data-d="2">
+        <div class="stats-row">
+          <div class="stat"><div class="stat-n">7+</div><div class="stat-l">Settori</div></div>
+          <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Aziende</div></div>
+          <div class="stat"><div class="stat-n">1</div><div class="stat-l">Interlocutore</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETTORI -->
+<section id="settori">
+  <div class="px sectors-head rv">
+    <div class="label">I miei settori</div>
+    <h2 class="h2">Ciò che <em>rappresento</em></h2>
+    <p class="body-t" style="margin-top:14px;max-width:480px">Scorri le card — ogni area è servita da un fornitore specializzato che rappresento.</p>
+    <div class="scroll-btns">
+      <button class="scr-btn" onclick="document.getElementById('sw').scrollBy({left:-270,behavior:'smooth'})" aria-label="Indietro">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+      </button>
+      <button class="scr-btn" onclick="document.getElementById('sw').scrollBy({left:270,behavior:'smooth'})" aria-label="Avanti">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="sectors-wrap" id="sw">
+    <div class="sectors-row">
+
+      <div class="sc">
+        <span class="sc-num">01</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+        <div class="sc-name">Imballaggi</div>
+        <p class="sc-desc">Packaging professionale — scatole, nastri, reggette, film estensibile e soluzioni su misura.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">02</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+        <div class="sc-name">Saldatura</div>
+        <p class="sc-desc">Macchine, elettrodi, fili, gas e accessori per la saldatura professionale e industriale.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">03</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="sc-name">Sicurezza & DPI</div>
+        <p class="sc-desc">Elmetti, scarpe antinfortun., guanti, imbracature e dispositivi di protezione certificati.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">04</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></div>
+        <div class="sc-name">Abbigliamento</div>
+        <p class="sc-desc">Divise, polo, giacche e capi personalizzati con logo aziendale per privati e aziende.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">05</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="sc-name">Schermi Ristorazione</div>
+        <p class="sc-desc">Display digitali, menu board e sistemi di visualizzazione per bar, ristoranti e food service.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">06</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
+        <div class="sc-name">Stampanti & Toner</div>
+        <p class="sc-desc">Stampanti laser e inkjet, toner originali e compatibili, consumabili e manutenzione.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">07</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="sc-name">Informatica</div>
+        <p class="sc-desc">Hardware, software, periferiche e soluzioni IT per uffici e aziende di ogni dimensione.</p>
+      </div>
+
+      <div class="sc">
+        <span class="sc-num">08</span>
+        <div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="sc-name">Marketing</div>
+        <p class="sc-desc">Materiali promozionali, gadget, branding e soluzioni di comunicazione visiva.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AZIENDE -->
+<section id="aziende">
+  <div class="px">
+    <div class="az-head rv">
+      <div class="label">I miei partner</div>
+      <h2 class="h2">Aziende <em>selezionate</em></h2>
+      <p class="body-t" style="margin-top:14px;max-width:480px">Ogni settore è coperto da un fornitore di eccellenza — io li coordino tutti per te.</p>
+    </div>
+    <div class="az-grid">
+      <div class="az-tile rv" data-d="1"><span class="az-tag">Imballaggi</span><span class="az-name">Tecnocart</span></div>
+      <div class="az-tile rv" data-d="2"><span class="az-tag">Saldatura</span><span class="az-name">MBM Project</span></div>
+      <div class="az-tile rv" data-d="3"><span class="az-tag">DPI & Utensili</span><span class="az-name">EmilTecnica</span></div>
+      <div class="az-tile rv" data-d="4"><span class="az-tag">Abbigliamento & Gadget</span><span class="az-name">Apple Promo</span></div>
+      <div class="az-tile rv" data-d="1"><span class="az-tag">Schermi & Tecnologia</span><span class="az-name">Dataspeed</span></div>
+      <div class="az-tile rv" data-d="2"><span class="az-tag">Stampanti & Toner</span><span class="az-name">Effezetadue</span></div>
+      <div class="az-tile rv" data-d="3"><span class="az-tag">Forniture Ufficio</span><span class="az-name">Sorelle Barracca</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOGHI -->
+<section id="cataloghi">
+  <div class="px">
+    <div class="cat-head">
+      <div class="cat-head-txt">
+        <div class="label rv">Cataloghi</div>
+        <h2 class="h2 rv">Sfoglia i <em>prodotti</em></h2>
+        <p class="body-t rv" style="margin-top:12px;max-width:420px">Scarica i PDF dei fornitori o contattami per un preventivo personalizzato.</p>
+      </div>
+      <button class="up-btn" onclick="alert('Caricamento — da configurare lato server.')">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Carica Catalogo
+      </button>
+    </div>
+    <div class="cat-list">
+
+      <div class="cat-card rv">
+        <div class="cat-thumb">
+          <span class="ct-lbl">EmilTecnica</span>
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-title">Catalogo Generale EmilTecnica</div>
+          <a class="cat-dl" href="assets/pdf/emiltecnica-catalogo-generale.pdf" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Scarica PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="cat-card rv" data-d="1">
+        <div class="cat-thumb">
+          <span class="ct-lbl">EmilTecnica</span>
+          <div class="ct-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4"/></svg></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-title">JRC Nuovi Prodotti 2026</div>
+          <a class="cat-dl" href="assets/pdf/emiltecnica-jrc-2026.pdf" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Scarica PDF
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTATTI -->
+<section id="contatti">
+  <div class="px">
+    <div class="rv">
+      <div class="label">Iniziamo</div>
+      <h2 class="h2" style="margin-top:14px">Parliamo del tuo <em>progetto</em></h2>
+      <p class="body-t" style="margin-top:14px;max-width:500px">Seleziona il settore di interesse, lasciami un contatto — ti rispondo in giornata.</p>
+    </div>
+
+    <div class="contact-layout">
+      <div class="rv">
+        <div class="step-lbl" style="margin-top:36px"><span>01</span> Di cosa hai bisogno?</div>
+        <div class="chips" id="chipGroup">
+          <div class="chip" data-v="imballaggi" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Imballaggi</div>
+          <div class="chip" data-v="saldatura" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4"/></svg>Saldatura</div>
+          <div class="chip" data-v="sicurezza" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Sicurezza</div>
+          <div class="chip" data-v="abbigliamento" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>Abbigliamento</div>
+          <div class="chip" data-v="ristorazione" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Ristorazione</div>
+          <div class="chip" data-v="stampa" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Stampa</div>
+          <div class="chip" data-v="informatica" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Informatica</div>
+          <div class="chip" data-v="marketing" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Marketing</div>
+        </div>
+
+        <div class="step-lbl"><span>02</span> Come ti contatto?</div>
+        <form class="mini-fields" onsubmit="sendForm(event)">
+          <div class="row2">
+            <div class="mf"><label>Nome</label><input type="text" name="nome" placeholder="Mario" required></div>
+            <div class="mf"><label>Azienda</label><input type="text" name="azienda" placeholder="(opzionale)"></div>
+          </div>
+          <div class="mf"><label>Email o Telefono</label><input type="text" name="contatto" placeholder="mario@email.com oppure 333 000 0000" required></div>
+          <div class="mf"><label>Note (opzionale)</label><textarea name="note" placeholder="Aggiungi dettagli se vuoi..."></textarea></div>
+          <button type="submit" class="send-btn">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Invia Richiesta
+          </button>
+        </form>
+      </div>
+
+      <div class="c-info rv" data-d="2">
+        <div>
+          <div class="c-title">Preferisci contattarmi direttamente?</div>
+          <p class="body-t" style="margin-top:8px;font-size:14px">Scegli il canale che preferisci — rispondo sempre.</p>
+        </div>
+        <a class="c-item" href="tel:+393896881004">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.1 6.1l.98-.99a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="c-lbl">Telefono</div><div class="c-val">+39 389 688 1004</div></div>
+        </a>
+        <a class="c-item" href="mailto:hello@pluriagency.com">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+          <div><div class="c-lbl">Email</div><div class="c-val">hello@pluriagency.com</div></div>
+        </a>
+        <a class="c-item" href="https://wa.me/393896881004" target="_blank">
+          <div class="c-ico wa">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </div>
+          <div><div class="c-lbl">WhatsApp</div><div class="c-val">Scrivimi subito</div></div>
+        </a>
+        <div class="c-item">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="c-lbl">Zona operativa</div><div class="c-val">Italia</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Lorenzo Attinà</div>
+  <div class="f-copy">© 2025 · Lorenzo Attinà · Consulenza Commerciale Multisettoriale</div>
+</footer>
+
+<script>
+function sendForm(e){
+  e.preventDefault();
+  const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v).join(', ');
+  const nome=e.target.nome.value;
+  const azienda=e.target.azienda.value;
+  const contatto=e.target.contatto.value;
+  const note=e.target.note.value;
+  const subject='Richiesta informazioni'+(chips?' — '+chips:'')+' da '+nome;
+  const body='Nome: '+nome+'\nAzienda: '+(azienda||'—')+'\nContatto: '+contatto+'\nInteressi: '+(chips||'—')+'\n\nNote:\n'+(note||'—');
+  window.location.href='mailto:hello@pluriagency.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+}
+
+document.getElementById('vcardBtn').addEventListener('click',e=>{
+  e.preventDefault();
+  const vc=['BEGIN:VCARD','VERSION:3.0','FN:Lorenzo Attinà','ORG:Consulenza Commerciale Multisettoriale','TEL;TYPE=CELL:+393896881004','EMAIL:hello@pluriagency.com','NOTE:Consulente Commerciale Multisettoriale','END:VCARD'].join('\r\n');
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([vc],{type:'text/vcard'})),download:'Lorenzo_Attina.vcf'});
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
