@@ -244,8 +244,8 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
         <div class="catalog-sub">Elettroutensili professionali — Catalogo completo</div>
       </div>
       <a href="assets/pdf/emiltecnica-milwaukee-2026.pdf" target="_blank" class="catalog-dl">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 8l4 4 4-4M2 14h12"/></svg>
-        Scarica PDF
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L7 9"/></svg>
+        Apri PDF
       </a>
     </div>
     <div class="catalog-card rv" data-d="1">
@@ -255,8 +255,8 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
         <div class="catalog-sub">Forniture industriali — Catalogo completo</div>
       </div>
       <a href="assets/pdf/emiltecnica-jrc-2026.pdf" target="_blank" class="catalog-dl">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 8l4 4 4-4M2 14h12"/></svg>
-        Scarica PDF
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L7 9"/></svg>
+        Apri PDF
       </a>
     </div>
   </div>
@@ -315,14 +315,19 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:40px 0
 </footer>
 
 <script>
-function sendForm(e){
+async function sendForm(e){
   e.preventDefault();
-  const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v).join(', ');
-  const nome=e.target.nome.value,azienda=e.target.azienda.value,contatto=e.target.contatto.value,note=e.target.note.value;
-  const co='EmilTecnica';
-  const subject='Richiesta '+co+(chips?' — '+chips:'')+' da '+nome;
-  const body='Azienda: '+co+'\nNome: '+nome+'\nAzienda cliente: '+(azienda||'—')+'\nContatto: '+contatto+'\nInteressi: '+(chips||'—')+'\n\nNote:\n'+(note||'—');
-  window.location.href='mailto:hello@pluriagency.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v);
+  const nome=e.target.nome.value.trim(),azienda=e.target.azienda?.value?.trim()||'',contatto=e.target.contatto.value.trim(),note=e.target.note?.value?.trim()||'';
+  const btn=e.target.querySelector('[type="submit"]');
+  const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contatto);
+  const data={name:nome,email:isEmail?contatto:'',phone:!isEmail?contatto:'',message:note||'—',company:azienda,chips,context:'EmilTecnica'};
+  btn.textContent='Invio in corso...';btn.disabled=true;
+  try{
+    const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    if(r.ok){btn.textContent='✓ Richiesta inviata';e.target.reset();document.querySelectorAll('.chip.on').forEach(c=>c.classList.remove('on'));}
+    else{btn.textContent='✗ Errore — riprova';btn.disabled=false;}
+  }catch{btn.textContent='✗ Connessione — riprova';btn.disabled=false;}
 }
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));

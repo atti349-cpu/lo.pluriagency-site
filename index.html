@@ -523,16 +523,19 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
 </footer>
 
 <script>
-function sendForm(e){
+async function sendForm(e){
   e.preventDefault();
-  const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v).join(', ');
-  const nome=e.target.nome.value;
-  const azienda=e.target.azienda.value;
-  const contatto=e.target.contatto.value;
-  const note=e.target.note.value;
-  const subject='Richiesta informazioni'+(chips?' — '+chips:'')+' da '+nome;
-  const body='Nome: '+nome+'\nAzienda: '+(azienda||'—')+'\nContatto: '+contatto+'\nInteressi: '+(chips||'—')+'\n\nNote:\n'+(note||'—');
-  window.location.href='mailto:hello@pluriagency.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v);
+  const nome=e.target.nome.value.trim(),azienda=e.target.azienda?.value?.trim()||'',contatto=e.target.contatto.value.trim(),note=e.target.note?.value?.trim()||'';
+  const btn=e.target.querySelector('[type="submit"]');
+  const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contatto);
+  const data={name:nome,email:isEmail?contatto:'',phone:!isEmail?contatto:'',message:note||'—',company:azienda,chips};
+  btn.textContent='Invio in corso...';btn.disabled=true;
+  try{
+    const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    if(r.ok){btn.textContent='✓ Richiesta inviata';e.target.reset();document.querySelectorAll('.chip.on').forEach(c=>c.classList.remove('on'));}
+    else{btn.textContent='✗ Errore — riprova';btn.disabled=false;}
+  }catch{btn.textContent='✗ Connessione — riprova';btn.disabled=false;}
 }
 
 document.getElementById('vcardBtn').addEventListener('click',e=>{

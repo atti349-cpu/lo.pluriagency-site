@@ -1,0 +1,8 @@
+{
+  "name": "lo-pluriagency-site",
+  "version": "1.0.0",
+  "description": "Lorenzo Attinà — lo.pluriagency.com",
+  "dependencies": {
+    "resend": "^4.0.0"
+  }
+}
