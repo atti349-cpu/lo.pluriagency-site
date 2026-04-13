@@ -228,30 +228,78 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
 /* AZ-TILE CON LOGO */
 .az-logo{width:48px;height:48px;border-radius:12px;background:var(--gold-dim);border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:1.3rem;font-weight:900;color:var(--gold);margin-bottom:10px;flex-shrink:0;transition:background .25s}
 .az-tile:hover .az-logo{background:rgba(212,168,67,.22)}
+
+/* CRM BUTTON */
+.nav-crm{font-family:var(--ff-d);font-size:12px;font-weight:700;letter-spacing:.08em;
+  padding:7px 14px;background:#071430;color:#6090e0;
+  border:1px solid rgba(96,144,224,.35);border-radius:6px;
+  transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.nav-crm:hover{background:#0a1d48;border-color:rgba(96,144,224,.7);color:#90b8ff;}
+
+/* HAMBURGER */
+.nav-hamburger{display:flex;flex-direction:column;justify-content:center;gap:5px;
+  background:transparent;border:none;cursor:pointer;padding:8px;flex-shrink:0;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--muted);
+  border-radius:2px;transition:all .25s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+@media(min-width:900px){.nav-hamburger{display:none;}}
+
+/* MOBILE DROPDOWN MENU */
+.nav-mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(7,8,10,.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:8px 0;z-index:799;
+  flex-direction:column;}
+.nav-mobile-menu.open{display:flex;}
+.nav-mobile-menu a{font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:14px 28px;border-bottom:1px solid var(--border);
+  transition:color .2s;font-weight:500;}
+.nav-mobile-menu a:last-child{border-bottom:none;}
+.nav-mobile-menu a:hover{color:var(--gold);}
+.nav-mobile-menu .crm-link{color:#6090e0;}
+.nav-mobile-menu .crm-link:hover{color:#90b8ff;}
+
+/* NAV RIGHT GROUP */
+.nav-right{display:flex;align-items:center;gap:20px;}
 </style>
 </head>
 <body>
 
 <nav>
   <a class="nav-logo" href="#hero">Lorenzo <span>Attinà</span></a>
-  <ul class="nav-links">
-    <li><a href="#settori">Settori</a></li>
-    <li class="nav-drop">
-      <a href="#aziende">Aziende</a>
-      <ul class="nav-drop-menu">
-        <li><a href="/emiltecnica">EmilTecnica</a></li>
-        <li><a href="/mbm-project">MBM Project</a></li>
-        <li><a href="/tecnocart">Tecnocart</a></li>
-        <li><a href="/apple-promo">Apple Promo</a></li>
-        <li><a href="/dataspeed">Dataspeed</a></li>
-        <li><a href="/sorelle-barracca">Sorelle Barracca</a></li>
-        <li><a href="/effezetadue">Effezetadue</a></li>
-      </ul>
-    </li>
-    <li><a href="#cataloghi">Cataloghi</a></li>
-    <li><a href="#contatti">Contatti</a></li>
-  </ul>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#settori">Settori</a></li>
+      <li class="nav-drop">
+        <a href="#aziende">Aziende</a>
+        <ul class="nav-drop-menu">
+          <li><a href="/emiltecnica">EmilTecnica</a></li>
+          <li><a href="/mbm-project">MBM Project</a></li>
+          <li><a href="/tecnocart">Tecnocart</a></li>
+          <li><a href="/apple-promo">Apple Promo</a></li>
+          <li><a href="/dataspeed">Dataspeed</a></li>
+          <li><a href="/sorelle-barracca">Sorelle Barracca</a></li>
+          <li><a href="/effezetadue">Effezetadue</a></li>
+        </ul>
+      </li>
+      <li><a href="#cataloghi">Cataloghi</a></li>
+      <li><a href="#contatti">Contatti</a></li>
+    </ul>
+    <a class="nav-crm" href="https://app.pluriagency.com" target="_blank">↗ CRM</a>
+  </div>
 </nav>
+
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#settori" onclick="toggleMenu()">Settori</a>
+  <a href="#aziende" onclick="toggleMenu()">Aziende</a>
+  <a href="#cataloghi" onclick="toggleMenu()">Cataloghi</a>
+  <a href="#contatti" onclick="toggleMenu()">Contatti</a>
+  <a href="https://app.pluriagency.com" target="_blank" class="crm-link">↗ CRM — Gestione Clienti</a>
+</div>
 
 <div class="cta-float">
   <a class="cta-pill cta-primary mob-only" href="#" id="vcardBtn">
@@ -296,7 +344,7 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
       </div>
       <div class="rv" data-d="2">
         <div class="stats-row">
-          <div class="stat"><div class="stat-n">7</div><div class="stat-l">Settori</div></div>
+          <div class="stat"><div class="stat-n">8</div><div class="stat-l">Settori</div></div>
           <div class="stat"><div class="stat-n">7+</div><div class="stat-l">Partner</div></div>
           <div class="stat"><div class="stat-n">1</div><div class="stat-l">Interlocutore</div></div>
         </div>
@@ -412,10 +460,6 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
         <h2 class="h2 rv">Sfoglia i <em>prodotti</em></h2>
         <p class="body-t rv" style="margin-top:12px;max-width:420px">Scarica i PDF dei fornitori o contattami per un preventivo personalizzato.</p>
       </div>
-      <button class="up-btn" onclick="alert('Caricamento — da configurare lato server.')">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Carica Catalogo
-      </button>
     </div>
     <div class="cat-list">
 
@@ -523,6 +567,13 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
 </footer>
 
 <script>
+function toggleMenu(){
+  const menu = document.getElementById('nav-mobile-menu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
 async function sendForm(e){
   e.preventDefault();
   const chips=[...document.querySelectorAll('.chip.on')].map(c=>c.dataset.v);
