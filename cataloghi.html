@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cataloghi Fornitori — Lorenzo Attinà</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07080a;
+  --deep:#0e1117;
+  --card:#13161d;
+  --border:rgba(255,255,255,0.07);
+  --gold:#d4a843;
+  --gold2:#f0c960;
+  --gold-dim:rgba(212,168,67,0.13);
+  --cream:#f2ebe0;
+  --muted:rgba(242,235,224,0.45);
+  --muted2:rgba(242,235,224,0.22);
+  --ff-d:'Playfair Display',Georgia,serif;
+  --ff-b:'Syne',sans-serif;
+  --nav-h:64px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-b);background:var(--black);color:var(--cream);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--ff-b);cursor:pointer;border:none;background:none}
+
+/* grain */
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.4}
+
+.label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.label::before{content:'';width:22px;height:1px;background:var(--gold);flex-shrink:0}
+.h2{font-family:var(--ff-d);font-size:clamp(2.1rem,5.5vw,4rem);font-weight:700;line-height:1.05;color:#fff}
+.h2 em{font-style:italic;color:var(--gold)}
+.body-t{font-size:15px;line-height:1.8;color:var(--muted);font-weight:300}
+.px{padding-left:24px;padding-right:24px}
+@media(min-width:768px){.px{padding-left:52px;padding-right:52px}}
+@media(min-width:1280px){.px{padding-left:88px;padding-right:88px}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(7,8,10,.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+@media(min-width:768px){nav{padding:0 52px}}
+.nav-logo{font-family:var(--ff-d);font-size:17px;font-weight:700;color:#fff}
+.nav-logo span{color:var(--gold);font-style:italic}
+.nav-back{font-family:var(--ff-b);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s;display:flex;align-items:center;gap:6px;font-weight:500}
+.nav-back:hover{color:var(--gold)}
+.nav-crm{padding:7px 16px;background:rgba(18,40,80,0.9);color:#4a9eff;font-size:11px;font-weight:600;letter-spacing:.08em;border-radius:6px;border:1px solid rgba(74,158,255,0.35);transition:all .2s;white-space:nowrap}
+.nav-crm:hover{background:rgba(74,158,255,0.15);border-color:rgba(74,158,255,0.6);color:#7ab8ff}
+
+/* HERO */
+.cat-hero{padding:calc(var(--nav-h) + 60px) 0 52px;position:relative}
+.cat-hero-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(212,168,67,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,.03) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+.cat-hero .px{position:relative;z-index:1}
+
+/* SUPPLIER SECTION */
+.supplier-section{padding:48px 0 16px}
+.supplier-section:first-of-type{padding-top:24px}
+.supplier-header{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.supplier-logo-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:16px;font-weight:900;color:var(--black);background:var(--gold);flex-shrink:0}
+.supplier-name{font-family:var(--ff-d);font-size:1.25rem;font-weight:700;color:#fff}
+.supplier-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:2px}
+.supplier-divider{flex:1;height:1px;background:var(--border)}
+
+/* CATALOG GRID */
+.cat-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
+@media(min-width:600px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* CATALOG CARD */
+.c-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
+.c-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
+.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);color:rgba(212,168,67,.2)}
+.c-thumb svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.c-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;gap:12px}
+.c-title{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:#fff;line-height:1.3}
+.c-view{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:9px 16px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
+.c-view:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
+.c-view svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* DRIVE NOTE */
+.drive-note{border:1px solid rgba(212,168,67,.12);background:rgba(212,168,67,.04);border-radius:10px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start;margin:40px 0 0}
+.drive-note svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px}
+.drive-note p{font-size:13px;color:var(--muted);line-height:1.7}
+.drive-note strong{color:var(--cream)}
+
+/* EMPTY CARD */
+.c-card-empty{background:transparent;border:1.5px dashed rgba(212,168,67,.12);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:36px 20px;min-height:130px;color:var(--muted2);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px;text-align:center;margin-top:60px}
+.footer-name{font-family:var(--ff-d);font-size:20px;font-weight:700;color:#fff;margin-bottom:8px}
+.footer-name span{font-style:italic;color:var(--gold)}
+.footer-sub{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.footer-sub span{color:#e88a8a}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">Lorenzo <span>Attinà</span></a>
+  <a class="nav-back" href="/">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg>
+    Home
+  </a>
+  <a class="nav-crm" href="https://app.pluriagency.com" target="_blank">↗ CRM</a>
+</nav>
+
+<!-- HERO -->
+<div class="cat-hero">
+  <div class="cat-hero-bg"></div>
+  <div class="px">
+    <div class="label">Cataloghi</div>
+    <h1 class="h2" style="margin-top:14px">Tutti i <em>cataloghi</em></h1>
+    <p class="body-t" style="margin-top:14px;max-width:500px">Sfoglia i cataloghi dei fornitori del portfolio, divisi per azienda. Ogni PDF si apre direttamente nel visualizzatore.</p>
+
+    <div class="drive-note" style="max-width:620px">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p><strong>Storage su Google Drive</strong> — I cataloghi sono ospitati su Google Drive per garantire accesso veloce e aggiornamenti semplici. Ogni link apre il visualizzatore nativo di Drive senza scaricare il file.</p>
+    </div>
+  </div>
+</div>
+
+<div style="padding:0 0 60px">
+
+  <!-- EMILTECNICA -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">E</div>
+      <div>
+        <div class="supplier-name">EmilTecnica</div>
+        <div class="supplier-tag">DPI &amp; Utensili Industriali</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+
+      <div class="c-card">
+        <div class="c-thumb">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="c-body">
+          <div class="c-title">Catalogo Milwaukee 2026</div>
+          <a class="c-view" href="assets/pdf/emiltecnica-milwaukee-2026.pdf" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Visualizza
+          </a>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <div class="c-thumb">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4"/></svg>
+        </div>
+        <div class="c-body">
+          <div class="c-title">JRC Nuovi Prodotti 2026</div>
+          <a class="c-view" href="assets/pdf/emiltecnica-jrc-2026.pdf" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Visualizza
+          </a>
+        </div>
+      </div>
+
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        In arrivo
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MBM PROJECT -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">M</div>
+      <div>
+        <div class="supplier-name">MBM Project</div>
+        <div class="supplier-tag">Saldatura &amp; Carpenteria Metallica</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+  <!-- TECNOCART -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">T</div>
+      <div>
+        <div class="supplier-name">Tecnocart</div>
+        <div class="supplier-tag">Imballaggi &amp; Confezionamento Industriale</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLE PROMO -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">A</div>
+      <div>
+        <div class="supplier-name">Apple Promo</div>
+        <div class="supplier-tag">Abbigliamento Personalizzato &amp; Gadget</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+  <!-- DATASPEED -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">D</div>
+      <div>
+        <div class="supplier-name">Dataspeed</div>
+        <div class="supplier-tag">Schermi Professionali &amp; Digital Signage</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+  <!-- SORELLE BARRACCA -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">S</div>
+      <div>
+        <div class="supplier-name">Sorelle Barracca</div>
+        <div class="supplier-tag">Forniture per Ufficio &amp; Cancelleria</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+  <!-- EFFEZETADUE -->
+  <div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">Z</div>
+      <div>
+        <div class="supplier-name">Effezetadue</div>
+        <div class="supplier-tag">Gestione Sistemi di Stampa &amp; Noleggio</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catalogo in caricamento
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="px">
+  <div class="footer-name">Lorenzo <span>Attinà</span></div>
+  <div class="footer-sub">Made with <span>♥</span> in Bologna</div>
+</footer>
+
+</body>
+</html>
