@@ -23,7 +23,7 @@
   --ff-b:'Syne',sans-serif;
   --nav-h:64px;
 }
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:var(--ff-b);background:var(--black);color:var(--cream);overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:var(--ff-b);cursor:pointer;border:none;background:none}
@@ -60,7 +60,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 .supplier-section{padding:48px 0 16px}
 .supplier-section:first-of-type{padding-top:24px}
 .supplier-header{display:flex;align-items:center;gap:16px;margin-bottom:28px}
-.supplier-logo-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:16px;font-weight:900;color:var(--black);background:var(--gold);flex-shrink:0}
+.supplier-logo-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:16px;font-weight:900;color:var(--black);background:var(--gold);flex-shrink:0;text-transform:uppercase}
 .supplier-name{font-family:var(--ff-d);font-size:1.25rem;font-weight:700;color:#fff}
 .supplier-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:2px}
 .supplier-divider{flex:1;height:1px;background:var(--border)}
@@ -73,22 +73,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 /* CATALOG CARD */
 .c-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
 .c-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
-.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);color:rgba(212,168,67,.2)}
-.c-thumb svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden;position:relative}
+.c-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+.c-thumb img.hidden{opacity:0}
+.c-thumb-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(212,168,67,.2)}
+.c-thumb-icon svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .c-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;gap:12px}
 .c-title{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:#fff;line-height:1.3}
 .c-view{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:9px 16px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
 .c-view:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
 .c-view svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* DRIVE NOTE */
-.drive-note{border:1px solid rgba(212,168,67,.12);background:rgba(212,168,67,.04);border-radius:10px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start;margin:40px 0 0}
-.drive-note svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px}
-.drive-note p{font-size:13px;color:var(--muted);line-height:1.7}
-.drive-note strong{color:var(--cream)}
-
 /* EMPTY CARD */
 .c-card-empty{background:transparent;border:1.5px dashed rgba(212,168,67,.12);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:36px 20px;min-height:130px;color:var(--muted2);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* LOADING */
+#catalog-root{min-height:200px}
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:16px}
+.spin{width:32px;height:32px;border:2px solid rgba(212,168,67,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state p{font-size:13px;color:var(--muted);letter-spacing:.06em}
+
+/* ERROR STATE */
+.error-state{padding:48px 24px;text-align:center}
+.error-state p{font-size:14px;color:var(--muted);line-height:1.7}
+.error-state strong{color:#e88a8a}
+
+/* SKELETON CARD */
+.c-card-skeleton{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;animation:pulse 1.5s ease-in-out infinite}
+.c-card-skeleton .sk-thumb{aspect-ratio:16/9;background:rgba(255,255,255,0.04)}
+.c-card-skeleton .sk-body{padding:16px 18px 18px}
+.c-card-skeleton .sk-line{height:14px;background:rgba(255,255,255,0.05);border-radius:4px;margin-bottom:10px}
+.c-card-skeleton .sk-line.short{width:60%}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:40px;text-align:center;margin-top:60px}
@@ -115,177 +132,109 @@ footer{border-top:1px solid var(--border);padding:40px;text-align:center;margin-
   <div class="px">
     <div class="label">Cataloghi</div>
     <h1 class="h2" style="margin-top:14px">Tutti i <em>cataloghi</em></h1>
-    <p class="body-t" style="margin-top:14px;max-width:500px">Sfoglia i cataloghi dei fornitori del portfolio, divisi per azienda. Ogni PDF si apre direttamente nel visualizzatore.</p>
-
-    <div class="drive-note" style="max-width:620px">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <p><strong>Storage su Google Drive</strong> — I cataloghi sono ospitati su Google Drive per garantire accesso veloce e aggiornamenti semplici. Ogni link apre il visualizzatore nativo di Drive senza scaricare il file.</p>
-    </div>
+    <p class="body-t" style="margin-top:14px;max-width:500px">Sfoglia i cataloghi dei fornitori, divisi per azienda. Ogni PDF si apre direttamente nel visualizzatore Google Drive.</p>
   </div>
 </div>
 
-<div style="padding:0 0 60px">
-
-  <!-- EMILTECNICA -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">E</div>
-      <div>
-        <div class="supplier-name">EmilTecnica</div>
-        <div class="supplier-tag">DPI &amp; Utensili Industriali</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-
-      <div class="c-card">
-        <div class="c-thumb">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </div>
-        <div class="c-body">
-          <div class="c-title">Catalogo Milwaukee 2026</div>
-          <a class="c-view" href="assets/pdf/emiltecnica-milwaukee-2026.pdf" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Visualizza
-          </a>
-        </div>
-      </div>
-
-      <div class="c-card">
-        <div class="c-thumb">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4"/></svg>
-        </div>
-        <div class="c-body">
-          <div class="c-title">JRC Nuovi Prodotti 2026</div>
-          <a class="c-view" href="assets/pdf/emiltecnica-jrc-2026.pdf" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Visualizza
-          </a>
-        </div>
-      </div>
-
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        In arrivo
-      </div>
-
-    </div>
+<!-- DYNAMIC CATALOG AREA -->
+<div id="catalog-root" style="padding:0 0 60px">
+  <div class="loading-state px">
+    <div class="spin"></div>
+    <p>Caricamento cataloghi…</p>
   </div>
-
-  <!-- MBM PROJECT -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">M</div>
-      <div>
-        <div class="supplier-name">MBM Project</div>
-        <div class="supplier-tag">Saldatura &amp; Carpenteria Metallica</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
-  <!-- TECNOCART -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">T</div>
-      <div>
-        <div class="supplier-name">Tecnocart</div>
-        <div class="supplier-tag">Imballaggi &amp; Confezionamento Industriale</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
-  <!-- APPLE PROMO -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">A</div>
-      <div>
-        <div class="supplier-name">Apple Promo</div>
-        <div class="supplier-tag">Abbigliamento Personalizzato &amp; Gadget</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
-  <!-- DATASPEED -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">D</div>
-      <div>
-        <div class="supplier-name">Dataspeed</div>
-        <div class="supplier-tag">Schermi Professionali &amp; Digital Signage</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
-  <!-- SORELLE BARRACCA -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">S</div>
-      <div>
-        <div class="supplier-name">Sorelle Barracca</div>
-        <div class="supplier-tag">Forniture per Ufficio &amp; Cancelleria</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
-  <!-- EFFEZETADUE -->
-  <div class="supplier-section px">
-    <div class="supplier-header">
-      <div class="supplier-logo-dot">Z</div>
-      <div>
-        <div class="supplier-name">Effezetadue</div>
-        <div class="supplier-tag">Gestione Sistemi di Stampa &amp; Noleggio</div>
-      </div>
-      <div class="supplier-divider"></div>
-    </div>
-    <div class="cat-grid">
-      <div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Catalogo in caricamento
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <footer class="px">
   <div class="footer-name">Lorenzo <span>Attinà</span></div>
   <div class="footer-sub">Made with <span>♥</span> in Bologna</div>
 </footer>
+
+<script>
+(async function loadCatalogs() {
+  const root = document.getElementById('catalog-root');
+
+  try {
+    const res = await fetch('/api/catalogs');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const { suppliers } = await res.json();
+
+    if (!suppliers || !suppliers.length) {
+      root.innerHTML = renderError('Nessun catalogo trovato nella cartella Drive.');
+      return;
+    }
+
+    root.innerHTML = '<div style="padding:0 0 60px">' +
+      suppliers.map(s => renderSupplier(s)).join('') +
+      '</div>';
+
+    // Lazy-load thumbnails — reveal once loaded, keep icon as bg fallback
+    root.querySelectorAll('.c-thumb img').forEach(img => {
+      if (img.complete && img.naturalWidth) {
+        img.classList.remove('hidden');
+      } else {
+        img.addEventListener('load', () => img.classList.remove('hidden'));
+        img.addEventListener('error', () => img.remove()); // icon stays visible
+      }
+    });
+
+  } catch (e) {
+    console.error('Catalog load error:', e);
+    root.innerHTML = renderError(
+      'Impossibile caricare i cataloghi. Verifica che <strong>GOOGLE_API_KEY</strong> sia configurata su Vercel.'
+    );
+  }
+})();
+
+function renderSupplier(s) {
+  const initial = s.name.charAt(0).toUpperCase();
+  const cards = s.files.length
+    ? s.files.map(f => renderCard(f)).join('')
+    : `<div class="c-card-empty">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Catalogo in caricamento
+       </div>`;
+
+  return `<div class="supplier-section px">
+    <div class="supplier-header">
+      <div class="supplier-logo-dot">${esc(initial)}</div>
+      <div>
+        <div class="supplier-name">${esc(s.name)}</div>
+      </div>
+      <div class="supplier-divider"></div>
+    </div>
+    <div class="cat-grid">${cards}</div>
+  </div>`;
+}
+
+function renderCard(f) {
+  return `<div class="c-card">
+    <div class="c-thumb">
+      <div class="c-thumb-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <img class="hidden" src="${esc(f.thumbnail)}" alt="${esc(f.name)}" loading="lazy">
+    </div>
+    <div class="c-body">
+      <div class="c-title">${esc(f.name)}</div>
+      <a class="c-view" href="${esc(f.url)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Visualizza
+      </a>
+    </div>
+  </div>`;
+}
+
+function renderError(msg) {
+  return `<div class="error-state px"><p>${msg}</p></div>`;
+}
+
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
 
 </body>
 </html>
