@@ -1,4 +1,13 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/emiltecnica",     "destination": "/azienda" },
+    { "source": "/mbm-project",     "destination": "/azienda" },
+    { "source": "/tecnocart",       "destination": "/azienda" },
+    { "source": "/apple-promo",     "destination": "/azienda" },
+    { "source": "/dataspeed",       "destination": "/azienda" },
+    { "source": "/sorelle-barracca","destination": "/azienda" },
+    { "source": "/effezetadue",     "destination": "/azienda" }
+  ]
 }
