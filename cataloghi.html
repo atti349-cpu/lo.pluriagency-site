@@ -73,32 +73,38 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 .cat-hero .px{position:relative;z-index:1}
 
 /* SUPPLIER SECTION */
-.supplier-section{padding:48px 0 16px}
-.supplier-section:first-of-type{padding-top:24px}
-.supplier-header{display:flex;align-items:center;gap:16px;margin-bottom:28px}
-.supplier-logo-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:16px;font-weight:900;color:var(--black);background:var(--gold);flex-shrink:0;text-transform:uppercase}
-.supplier-name{font-family:var(--ff-d);font-size:1.25rem;font-weight:700;color:#fff}
+.supplier-section{padding:36px 0 8px}
+.supplier-section:first-of-type{padding-top:20px}
+.supplier-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;cursor:pointer;user-select:none}
+.supplier-header:hover .supplier-name{color:var(--gold)}
+.supplier-logo-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:15px;font-weight:900;color:var(--black);background:var(--gold);flex-shrink:0;text-transform:uppercase}
+.supplier-name{font-family:var(--ff-d);font-size:1.1rem;font-weight:700;color:#fff;transition:color .2s}
 .supplier-tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:2px}
 .supplier-divider{flex:1;height:1px;background:var(--border)}
+.supplier-chevron{width:20px;height:20px;flex-shrink:0;color:var(--muted);transition:transform .25s}
+.supplier-chevron svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.supplier-section.collapsed .supplier-chevron{transform:rotate(-90deg)}
+.supplier-section.collapsed .cat-grid-wrap{display:none}
 
 /* CATALOG GRID */
-.cat-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
-@media(min-width:600px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:900px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:8px}
+@media(min-width:768px){.cat-grid{grid-template-columns:repeat(3,1fr);gap:16px}}
+@media(min-width:1200px){.cat-grid{grid-template-columns:repeat(4,1fr)}}
 
 /* CATALOG CARD */
 .c-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
 .c-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
-.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden;position:relative;flex-shrink:0}
-.c-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+.c-thumb{aspect-ratio:3/2;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden;position:relative;flex-shrink:0}
+.c-card:hover .c-thumb img{transform:scale(1.04)}
+.c-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s,transform .4s}
 .c-thumb img.hidden{opacity:0}
 .c-thumb-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(212,168,67,.2)}
-.c-thumb-icon svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.c-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;gap:12px}
-.c-title{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:#fff;line-height:1.3}
-.c-view{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:9px 16px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
+.c-thumb-icon svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.c-body{padding:12px 14px 14px;flex:1;display:flex;flex-direction:column;gap:10px}
+.c-title{font-family:var(--ff-d);font-size:.88rem;font-weight:700;color:#fff;line-height:1.3}
+.c-view{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:7px 13px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
 .c-view:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
-.c-view svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.c-view svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* EMPTY CARD */
 .c-card-empty{background:transparent;border:1.5px dashed rgba(212,168,67,.12);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:36px 20px;min-height:130px;color:var(--muted2);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
@@ -196,20 +202,28 @@ function nameToSlug(s){ return s.toLowerCase().replace(/_/g,'-').replace(/[^a-z0
 
 function renderSupplier(s) {
   const slug = nameToSlug(s.name);
+  const id = 'sup-' + slug.replace(/[^a-z0-9]/g,'');
   const cards = s.files.length
     ? s.files.map(f => renderCard(f)).join('')
     : `<div class="c-card-empty"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nessun file trovato</div>`;
-  return `<div class="supplier-section px">
-    <div class="supplier-header">
-      <a href="/${esc(slug)}" class="supplier-logo-dot" title="Vai alla pagina ${esc(s.name)}" style="text-decoration:none">${esc(s.name.charAt(0))}</a>
+  return `<div class="supplier-section px" id="${id}">
+    <div class="supplier-header" onclick="toggleSupplier('${id}')">
+      <a href="/${esc(slug)}" class="supplier-logo-dot" title="Vai alla pagina ${esc(s.name)}" style="text-decoration:none" onclick="event.stopPropagation()">${esc(s.name.charAt(0))}</a>
       <div>
-        <a href="/${esc(slug)}" class="supplier-name" style="text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color=''">${esc(s.name)}</a>
+        <div class="supplier-name">${esc(s.name)}</div>
         <div class="supplier-tag">${s.files.length} catalogo${s.files.length !== 1 ? 'hi' : ''}</div>
       </div>
       <div class="supplier-divider"></div>
+      <a href="/${esc(slug)}" style="font-size:11px;color:var(--gold);letter-spacing:.08em;white-space:nowrap;flex-shrink:0" onclick="event.stopPropagation()">↗ Pagina</a>
+      <div class="supplier-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
     </div>
-    <div class="cat-grid">${cards}</div>
+    <div class="cat-grid-wrap"><div class="cat-grid">${cards}</div></div>
   </div>`;
+}
+
+function toggleSupplier(id){
+  const sec = document.getElementById(id);
+  if(sec) sec.classList.toggle('collapsed');
 }
 
 function renderCard(f) {

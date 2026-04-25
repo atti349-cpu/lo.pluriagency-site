@@ -1,10 +1,11 @@
 /**
  * GET /api/catalogs
- * Proxies Google Drive API to list supplier subfolders and their PDF catalogs.
- * Requires GOOGLE_API_KEY env variable (free API key, no OAuth needed for public folders).
+ * Lists supplier subfolders + their PDF catalogs (1 level deep, includes sub-subfolders).
+ * Requires GOOGLE_API_KEY env variable (no OAuth, public folders only).
  *
- * Drive folder: https://drive.google.com/drive/folders/1KZf-IdEfWZ_ohmN2vjH1h2_FtjW4IKGO
- * Structure:    <root>/<Supplier Folder>/<catalog.pdf>
+ * Drive root: 1KZf-IdEfWZ_ohmN2vjH1h2_FtjW4IKGO  (CATALOGHI_FORN_LO)
+ * Structure:  <root>/<Supplier>/<catalog.pdf>   OR
+ *             <root>/<Supplier>/<SubBrand>/<catalog.pdf>
  *
  * Returns: { suppliers: [{ name, id, files: [{ id, name, thumbnail, url }] }] }
  */
@@ -22,34 +23,51 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 1. List supplier subfolders in root
+    // 1. Supplier subfolders in root
     const subfolders = await driveList(API_KEY, {
       q: `'${ROOT_FOLDER_ID}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,
       fields: 'files(id,name)',
       orderBy: 'name'
     });
 
-    // 2. For each subfolder, list PDF files (parallel)
+    // 2. For each supplier: fetch direct PDFs + PDFs in sub-subfolders (parallel)
     const suppliers = await Promise.all(subfolders.map(async folder => {
-      const files = await driveList(API_KEY, {
-        q: `'${folder.id}' in parents and mimeType='application/pdf' and trashed=false`,
-        fields: 'files(id,name)',
-        orderBy: 'name'
-      });
+      const [directPdfs, subFolders] = await Promise.all([
+        driveList(API_KEY, {
+          q: `'${folder.id}' in parents and mimeType='application/pdf' and trashed=false`,
+          fields: 'files(id,name)',
+          orderBy: 'name'
+        }),
+        driveList(API_KEY, {
+          q: `'${folder.id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,
+          fields: 'files(id,name)',
+          orderBy: 'name'
+        })
+      ]);
+
+      // Fetch PDFs from each sub-subfolder in parallel
+      const subPdfsArrays = await Promise.all(subFolders.map(sub =>
+        driveList(API_KEY, {
+          q: `'${sub.id}' in parents and mimeType='application/pdf' and trashed=false`,
+          fields: 'files(id,name)',
+          orderBy: 'name'
+        })
+      ));
+
+      const allFiles = [...directPdfs, ...subPdfsArrays.flat()];
+
       return {
         name: folder.name,
         id: folder.id,
-        files: files.map(f => ({
+        files: allFiles.map(f => ({
           id: f.id,
           name: f.name.replace(/\.pdf$/i, ''),
-          // Public thumbnail — works for files shared with "anyone with the link"
           thumbnail: `https://drive.google.com/thumbnail?id=${f.id}&sz=w400`,
           url: `https://drive.google.com/file/d/${f.id}/view`
         }))
       };
     }));
 
-    // Cache for 5 min on Vercel Edge, serve stale while revalidating
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     return res.status(200).json({ suppliers });
 
@@ -62,6 +80,7 @@ module.exports = async function handler(req, res) {
 async function driveList(apiKey, params) {
   const url = new URL(DRIVE_BASE);
   url.searchParams.set('key', apiKey);
+  url.searchParams.set('pageSize', '200');
   for (const [k, v] of Object.entries(params)) {
     url.searchParams.set(k, v);
   }
