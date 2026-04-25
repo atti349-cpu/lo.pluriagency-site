@@ -142,29 +142,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 .cat-head{display:flex;flex-direction:column;gap:24px;margin-bottom:40px}
 @media(min-width:768px){.cat-head{flex-direction:row;align-items:flex-end;justify-content:space-between}}
 .cat-head-txt .h2{margin:14px 0 12px}
-.up-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:transparent;border:1px solid rgba(212,168,67,.4);color:var(--gold);border-radius:50px;font-size:13px;font-weight:600;letter-spacing:.06em;transition:all .2s;white-space:nowrap;align-self:flex-start;cursor:pointer}
-.up-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
-.up-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.cat-list{display:flex;flex-direction:column;gap:14px}
-@media(min-width:700px){.cat-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}}
-@media(min-width:1000px){.cat-list{grid-template-columns:repeat(3,1fr)}}
-
-.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
-.cat-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
-.cat-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border)}
-.ct-ico{color:rgba(212,168,67,.25)}
-.ct-ico svg{width:48px;height:48px;stroke:currentColor;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
-.ct-lbl{position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:rgba(212,168,67,.1);padding:3px 10px;border-radius:20px;border:1px solid rgba(212,168,67,.15)}
-.cat-body{padding:18px 18px 20px;flex:1;display:flex;flex-direction:column;gap:12px}
-.cat-title{font-family:var(--ff-d);font-size:1.05rem;font-weight:700;color:#fff;line-height:1.25}
-.cat-dl{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:9px 16px;background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);transition:all .2s;align-self:flex-start}
-.cat-dl:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
-.cat-dl svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.cat-add{border:1.5px dashed rgba(212,168,67,.18);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:14px;color:var(--muted2);cursor:pointer;padding:40px 20px;transition:border-color .2s,color .2s;min-height:140px}
-.cat-add:hover{border-color:rgba(212,168,67,.45);color:var(--gold)}
-.cat-add svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.cat-add span{font-size:12px;letter-spacing:.06em;text-align:center}
+/* Slider */
+.cat-slider{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 0 20px}
+.cat-slider::-webkit-scrollbar{display:none}
+.cat-slide{flex:0 0 190px;scroll-snap-align:start;flex-shrink:0}
+@media(min-width:600px){.cat-slide{flex:0 0 220px}}
+.cat-slide-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .25s,transform .25s;height:100%}
+.cat-slide-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
+.cat-slide-thumb{aspect-ratio:4/3;background:linear-gradient(135deg,#0e1117,#161921);
+  display:flex;align-items:center;justify-content:center;position:relative;
+  border-bottom:1px solid var(--border);overflow:hidden}
+.cat-slide-thumb img{width:100%;height:100%;object-fit:cover;display:block;
+  position:absolute;inset:0;transition:opacity .3s;opacity:0}
+.cat-slide-ico{color:rgba(212,168,67,.2);z-index:0}
+.cat-slide-ico svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.2}
+.cat-slide-sup{position:absolute;top:8px;left:8px;font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);background:rgba(12,12,14,.82);backdrop-filter:blur(4px);
+  padding:2px 8px;border-radius:20px;border:1px solid rgba(212,168,67,.2);z-index:2;
+  max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-slide-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cat-slide-title{font-family:var(--ff-d);font-size:.88rem;font-weight:700;color:#fff;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cat-slide-btn{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:7px 14px;
+  background:var(--gold-dim);border-radius:50px;border:1px solid rgba(212,168,67,.2);
+  transition:all .2s;align-self:flex-start;margin-top:auto;text-decoration:none}
+.cat-slide-btn:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
+.cat-slide-skel{flex:0 0 190px;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;animation:pulse 1.5s ease-in-out infinite;flex-shrink:0}
+@media(min-width:600px){.cat-slide-skel{flex:0 0 220px}}
+.cat-slide-skel .sk-t{aspect-ratio:4/3;background:rgba(255,255,255,.04)}
+.cat-slide-skel .sk-b{padding:14px 16px}
+.cat-slide-skel .sk-l{height:11px;background:rgba(255,255,255,.05);border-radius:4px;margin-bottom:8px}
+.cat-slide-skel .sk-l.s{width:65%}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 
 /* CONTATTI */
 #contatti{background:var(--deep);padding:96px 0}
@@ -462,34 +476,11 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
         <p class="body-t rv" style="margin-top:12px;max-width:420px">Consulta i cataloghi dei fornitori o contattami per un preventivo personalizzato.</p>
       </div>
     </div>
-    <div class="cat-list">
-
-      <div class="cat-card rv">
-        <div class="cat-thumb">
-          <div class="ct-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-title">Catalogo Milwaukee 2026</div>
-          <a class="cat-dl" href="assets/pdf/emiltecnica-milwaukee-2026.pdf" target="_blank">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-            Visualizza
-          </a>
-        </div>
-      </div>
-
-      <div class="cat-card rv" data-d="1">
-        <div class="cat-thumb">
-          <div class="ct-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4"/></svg></div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-title">JRC Nuovi Prodotti 2026</div>
-          <a class="cat-dl" href="assets/pdf/emiltecnica-jrc-2026.pdf" target="_blank">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-            Visualizza
-          </a>
-        </div>
-      </div>
-
+    <div class="cat-slider" id="cat-slider">
+      <div class="cat-slide-skel"><div class="sk-t"></div><div class="sk-b"><div class="sk-l"></div><div class="sk-l s"></div></div></div>
+      <div class="cat-slide-skel"><div class="sk-t"></div><div class="sk-b"><div class="sk-l"></div><div class="sk-l s"></div></div></div>
+      <div class="cat-slide-skel"><div class="sk-t"></div><div class="sk-b"><div class="sk-l"></div><div class="sk-l s"></div></div></div>
+      <div class="cat-slide-skel"><div class="sk-t"></div><div class="sk-b"><div class="sk-l"></div><div class="sk-l s"></div></div></div>
     </div>
 
     <div style="margin-top:32px;text-align:center;">
@@ -605,6 +596,44 @@ document.getElementById('vcardBtn').addEventListener('click',e=>{
 
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// Cataloghi slider — 1 PDF per fornitore, max 8, da Google Drive
+(async function loadCatalogSlider(){
+  const slider = document.getElementById('cat-slider');
+  function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  try {
+    const res = await fetch('/api/catalogs');
+    if(!res.ok) throw new Error();
+    const { suppliers } = await res.json();
+    if(!suppliers || !suppliers.length){ slider.innerHTML = ''; return; }
+    const items = suppliers
+      .filter(s => s.files && s.files.length)
+      .slice(0, 8)
+      .map(s => ({ supplier: s.name, ...s.files[0] }));
+    if(!items.length){ slider.innerHTML = ''; return; }
+    const pdf_icon = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
+    slider.innerHTML = items.map(item => `
+      <div class="cat-slide">
+        <div class="cat-slide-card">
+          <div class="cat-slide-thumb">
+            <div class="cat-slide-ico">${pdf_icon}</div>
+            <img src="https://drive.google.com/thumbnail?id=${_esc(item.id)}&sz=w400"
+              alt="${_esc(item.name)}" loading="lazy"
+              onload="this.style.opacity=1"
+              onerror="this.remove()">
+            <span class="cat-slide-sup">${_esc(item.supplier)}</span>
+          </div>
+          <div class="cat-slide-body">
+            <div class="cat-slide-title">${_esc(item.name)}</div>
+            <a class="cat-slide-btn" href="${_esc(item.url)}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="11" height="11"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Sfoglia
+            </a>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch(e) { slider.innerHTML = ''; }
+})();
 
 // Aziende grid — carica da Supabase, fallback al markup statico già presente
 (async function loadAziende(){

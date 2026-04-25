@@ -320,33 +320,8 @@ function renderPage(az){
     </div>`).join('');
   if(!cats.length) document.getElementById('section-prodotti').style.display = 'none';
 
-  // Cataloghi
-  const catalogGrid = document.getElementById('catalog-grid');
-  const cats2 = az.cataloghi || [];
-  if(cats2.length){
-    catalogGrid.innerHTML = cats2.map((c,i) => {
-      const thumb = c.anteprima_url || gdriveThumbnail(c.url);
-      const previewHtml = thumb
-        ? `<div class="catalog-preview"><img src="${thumb}" alt="${c.nome}" loading="lazy"></div>`
-        : `<div class="catalog-preview"><div class="catalog-preview-placeholder"><div class="cat-icon">📋</div><div class="cat-label">Catalogo</div></div></div>`;
-      return `
-      <div class="catalog-card rv" ${i>0?`data-d="${Math.min(i,2)}"`:''}>
-        ${previewHtml}
-        <div class="catalog-body">
-          <div>
-            <div class="catalog-name">${c.nome}</div>
-            ${c.sottotitolo ? `<div class="catalog-sub">${c.sottotitolo}</div>` : ''}
-          </div>
-          <a href="${c.url}" target="_blank" rel="noopener" class="catalog-dl">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L7 9"/></svg>
-            ${c.tipo === 'link' ? 'Apri sito' : 'Apri PDF'}
-          </a>
-        </div>
-      </div>`;
-    }).join('');
-  } else {
-    catalogGrid.innerHTML = `<div class="catalogs-empty">Cataloghi in aggiornamento — torna presto.</div>`;
-  }
+  // Cataloghi — load after page render (async, Drive + JSONB merge)
+  loadDriveCatalogs(az);
 
   // Chips contatto dai nomi categorie
   const chips = document.getElementById('contact-chips');
@@ -386,6 +361,63 @@ async function loadAzienda(){
   } catch(e) {
     console.error(e);
     show404();
+  }
+}
+
+// ===== CATALOGHI DA DRIVE =====
+function _normName(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+function _renderCatalogCard(c, i){
+  const thumb = c.anteprima_url || gdriveThumbnail(c.url);
+  return `
+  <div class="catalog-card rv" ${i>0?`data-d="${Math.min(i,2)}"`:''}>
+    <div class="catalog-preview" style="position:relative">
+      <div class="catalog-preview-placeholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+        <div class="cat-icon" style="font-size:2.2rem;opacity:.5">📋</div>
+        <div class="cat-label">PDF</div>
+      </div>
+      ${thumb ? `<img src="${thumb}" alt="${c.nome||''}" loading="lazy"
+        style="position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s;opacity:0"
+        onload="this.style.opacity=1" onerror="this.remove()">` : ''}
+    </div>
+    <div class="catalog-body">
+      <div>
+        <div class="catalog-name">${c.nome||''}</div>
+        ${c.sottotitolo ? `<div class="catalog-sub">${c.sottotitolo}</div>` : ''}
+      </div>
+      <a href="${c.url}" target="_blank" rel="noopener" class="catalog-dl">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L7 9"/></svg>
+        ${c.tipo === 'link' ? 'Apri sito' : 'Sfoglia PDF'}
+      </a>
+    </div>
+  </div>`;
+}
+
+async function loadDriveCatalogs(az){
+  const catalogGrid = document.getElementById('catalog-grid');
+  const jsonbCats = (az.cataloghi || []);
+
+  try {
+    const res = await fetch('/api/catalogs');
+    if(!res.ok) throw new Error();
+    const { suppliers } = await res.json();
+    const match = (suppliers||[]).find(s => _normName(s.name) === _normName(az.nome));
+    const driveFiles = match ? match.files.map(f => ({ nome: f.name, url: f.url, anteprima_url: f.thumbnail, tipo: 'pdf' })) : [];
+    const allCats = [...driveFiles, ...jsonbCats.filter(c => !driveFiles.some(d => d.url === c.url))];
+
+    if(!allCats.length){
+      catalogGrid.innerHTML = `<div class="catalogs-empty">Cataloghi in aggiornamento — torna presto.</div>`;
+      return;
+    }
+    catalogGrid.innerHTML = allCats.map(_renderCatalogCard).join('');
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.1 });
+    catalogGrid.querySelectorAll('.rv').forEach(el => obs.observe(el));
+  } catch(e){
+    if(jsonbCats.length){
+      catalogGrid.innerHTML = jsonbCats.map(_renderCatalogCard).join('');
+    } else {
+      catalogGrid.innerHTML = `<div class="catalogs-empty">Cataloghi in aggiornamento — torna presto.</div>`;
+    }
   }
 }
 

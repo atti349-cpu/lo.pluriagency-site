@@ -73,7 +73,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 /* CATALOG CARD */
 .c-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,transform .25s}
 .c-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
-.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden;position:relative}
+.c-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0e1117,#161921);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden;position:relative;flex-shrink:0}
 .c-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
 .c-thumb img.hidden{opacity:0}
 .c-thumb-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(212,168,67,.2)}
@@ -147,60 +147,48 @@ footer{border-top:1px solid var(--border);padding:40px;text-align:center;margin-
 <footer class="px">
   <div class="footer-name">Lorenzo <span>Attinà</span></div>
   <div class="footer-sub">Made with <span>♥</span> in Bologna</div>
+  <div class="footer-sub" style="margin-top:6px;opacity:.5;font-size:10px">P.IVA 04129241206 · Via Calanchi 8, Anzola dell'Emilia (BO) · hello@pluriagency.com</div>
 </footer>
 
 <script>
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function nameToSlug(s){ return s.toLowerCase().replace(/_/g,'-').replace(/[^a-z0-9-]/g,''); }
+
+// Show skeletons immediately
+(function showSkeleton(){
+  const root = document.getElementById('catalog-root');
+  const skRow = n => `<div class="cat-grid" style="padding:0 24px 40px">` +
+    Array.from({length:n}, () => `<div class="c-card-skeleton"><div class="sk-thumb"></div><div class="sk-body"><div class="sk-line"></div><div class="sk-line short"></div></div></div>`).join('') + '</div>';
+  root.innerHTML = '<div style="padding-top:8px">' + skRow(3) + skRow(3) + '</div>';
+})();
+
 (async function loadCatalogs() {
   const root = document.getElementById('catalog-root');
-
   try {
     const res = await fetch('/api/catalogs');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const { suppliers } = await res.json();
-
     if (!suppliers || !suppliers.length) {
       root.innerHTML = renderError('Nessun catalogo trovato nella cartella Drive.');
       return;
     }
-
-    root.innerHTML = '<div style="padding:0 0 60px">' +
-      suppliers.map(s => renderSupplier(s)).join('') +
-      '</div>';
-
-    // Lazy-load thumbnails — reveal once loaded, keep icon as bg fallback
-    root.querySelectorAll('.c-thumb img').forEach(img => {
-      if (img.complete && img.naturalWidth) {
-        img.classList.remove('hidden');
-      } else {
-        img.addEventListener('load', () => img.classList.remove('hidden'));
-        img.addEventListener('error', () => img.remove()); // icon stays visible
-      }
-    });
-
+    root.innerHTML = '<div style="padding:0 0 60px">' + suppliers.map(s => renderSupplier(s)).join('') + '</div>';
   } catch (e) {
-    console.error('Catalog load error:', e);
-    root.innerHTML = renderError(
-      'Impossibile caricare i cataloghi. Verifica che <strong>GOOGLE_API_KEY</strong> sia configurata su Vercel.'
-    );
+    root.innerHTML = renderError('Impossibile caricare i cataloghi. Verifica la configurazione <strong>GOOGLE_API_KEY</strong> su Vercel.');
   }
 })();
 
 function renderSupplier(s) {
-  const initial = s.name.charAt(0).toUpperCase();
+  const slug = nameToSlug(s.name);
   const cards = s.files.length
     ? s.files.map(f => renderCard(f)).join('')
-    : `<div class="c-card-empty">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Catalogo in caricamento
-       </div>`;
-
+    : `<div class="c-card-empty"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nessun file trovato</div>`;
   return `<div class="supplier-section px">
     <div class="supplier-header">
-      <div class="supplier-logo-dot">${esc(initial)}</div>
+      <a href="/${esc(slug)}" class="supplier-logo-dot" title="Vai alla pagina ${esc(s.name)}" style="text-decoration:none">${esc(s.name.charAt(0))}</a>
       <div>
-        <div class="supplier-name">${esc(s.name)}</div>
+        <a href="/${esc(slug)}" class="supplier-name" style="text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color=''">${esc(s.name)}</a>
+        <div class="supplier-tag">${s.files.length} catalogo${s.files.length !== 1 ? 'hi' : ''}</div>
       </div>
       <div class="supplier-divider"></div>
     </div>
@@ -209,31 +197,28 @@ function renderSupplier(s) {
 }
 
 function renderCard(f) {
+  const thumb = f.thumbnail.replace(/&sz=\w+/, '&sz=w300');
   return `<div class="c-card">
     <div class="c-thumb">
       <div class="c-thumb-icon">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
-      <img class="hidden" src="${esc(f.thumbnail)}" alt="${esc(f.name)}" loading="lazy">
+      <img src="${esc(thumb)}" alt="${esc(f.name)}" loading="lazy"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s"
+        onload="this.style.opacity=1"
+        onerror="this.remove()">
     </div>
     <div class="c-body">
       <div class="c-title">${esc(f.name)}</div>
       <a class="c-view" href="${esc(f.url)}" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        Visualizza
+        Sfoglia
       </a>
     </div>
   </div>`;
 }
 
-function renderError(msg) {
-  return `<div class="error-state px"><p>${msg}</p></div>`;
-}
-
-function esc(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function renderError(msg){ return `<div class="error-state px"><p>${msg}</p></div>`; }
 </script>
 
 </body>
