@@ -4,7 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Azienda – Lorenzo Attinà</title>
-<meta id="page-desc" name="description" content="">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta id="page-desc" name="description" content="Scopri i prodotti e i cataloghi di questo fornitore rappresentato da Lorenzo Attinà.">
+<meta name="robots" content="index, follow">
+<meta id="og-title" property="og:title" content="Azienda – Lorenzo Attinà">
+<meta id="og-desc" property="og:description" content="Scopri i prodotti e i cataloghi di questo fornitore rappresentato da Lorenzo Attinà.">
+<meta id="og-url" property="og:url" content="https://lo.pluriagency.com/">
+<meta id="og-image" property="og:image" content="https://lo.pluriagency.com/og-image.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lorenzo Attinà">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+<meta id="tw-title" name="twitter:title" content="Azienda – Lorenzo Attinà">
+<meta id="tw-desc" name="twitter:description" content="Scopri i prodotti e i cataloghi di questo fornitore rappresentato da Lorenzo Attinà.">
+<meta id="tw-image" name="twitter:image" content="https://lo.pluriagency.com/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -283,9 +297,18 @@ function renderPage(az){
   const accent = az.colore_accento || '#4a90d9';
   document.documentElement.style.setProperty('--accent', accent);
 
-  // SEO
-  document.getElementById('page-title').textContent = `${az.nome} – Lorenzo Attinà`;
-  document.getElementById('page-desc').setAttribute('content', az.tag_line || '');
+  // SEO — title, description, OG, Twitter
+  const _seoTitle = `${az.nome} – Lorenzo Attinà`;
+  const _seoDesc = az.tag_line || `Scopri i prodotti e i cataloghi di ${az.nome}, fornitore rappresentato da Lorenzo Attinà.`;
+  const _seoUrl = `https://lo.pluriagency.com/${az.slug}`;
+  const _seoImg = az.foto_hero_url || 'https://lo.pluriagency.com/og-image.png';
+  document.getElementById('page-title').textContent = _seoTitle;
+  document.getElementById('page-desc').setAttribute('content', _seoDesc);
+  const _sm = (id, attr, val) => { const el = document.getElementById(id); if(el) el.setAttribute(attr, val); };
+  _sm('og-title','content',_seoTitle); _sm('og-desc','content',_seoDesc);
+  _sm('og-url','content',_seoUrl);     _sm('og-image','content',_seoImg);
+  _sm('tw-title','content',_seoTitle); _sm('tw-desc','content',_seoDesc);
+  _sm('tw-image','content',_seoImg);
 
   // Orbs
   document.getElementById('orb1').style.background = `radial-gradient(circle,${accent}28 0%,transparent 70%)`;
