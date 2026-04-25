@@ -38,10 +38,33 @@ module.exports = async function handler(req, res) {
       </tr>` : '';
 
   try {
+    // Salva su Supabase (silenzioso — non blocca email se fallisce)
+    const sbUrl = process.env.SUPABASE_URL;
+    const sbKey = process.env.SUPABASE_ANON_KEY;
+    if(sbUrl && sbKey){
+      fetch(`${sbUrl}/rest/v1/lo_contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': sbKey,
+          'Authorization': `Bearer ${sbKey}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          nome: name,
+          email: email || null,
+          phone: phone || null,
+          azienda: company || null,
+          messaggio: message,
+          chips: chips || []
+        })
+      }).catch(() => {});
+    }
+
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email||'');
     await resend.emails.send({
       from: 'Lorenzo Attinà <hello@pluriagency.com>',
-      to: 'hello@pluriagency.com',
+      to: ['hello@pluriagency.com', 'atti349@gmail.com'],
       ...(isValidEmail ? { replyTo: email } : {}),
       subject: `Nuova richiesta da ${name}${context ? ' [' + context + ']' : ''}${company ? ' — ' + company : ''}`,
       html: `

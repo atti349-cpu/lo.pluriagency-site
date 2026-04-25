@@ -152,6 +152,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 .az-tile:hover{border-color:rgba(212,168,67,.35);transform:translateY(-3px)}
 .az-tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);padding:3px 10px;border-radius:20px}
 .az-name{font-family:var(--ff-d);font-size:.95rem;font-weight:700;color:#fff;line-height:1.2}
+.az-tile.with-img{padding:0;overflow:hidden;align-items:stretch;text-align:left;}
+.az-tile.with-img:hover .az-card-img{transform:scale(1.04);}
+.az-card-img{width:100%;height:130px;object-fit:cover;display:block;flex-shrink:0;transition:transform .4s;}
+.az-card-body{padding:14px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;}
+.az-logo{width:52px;height:52px;border-radius:12px;border:1px solid;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:1.3rem;font-weight:700;flex-shrink:0;}
 
 /* CATALOGHI */
 #cataloghi{background:var(--black);padding:96px 0}
@@ -605,7 +610,7 @@ async function sendForm(e){
 
 document.getElementById('vcardBtn').addEventListener('click',e=>{
   e.preventDefault();
-  const vc=['BEGIN:VCARD','VERSION:3.0','FN:Lorenzo Attinà','ORG:Consulenza Commerciale Multisettoriale','TEL;TYPE=CELL:+393896881004','EMAIL:hello@pluriagency.com','NOTE:Consulente Commerciale Multisettoriale','END:VCARD'].join('\r\n');
+  const vc=['BEGIN:VCARD','VERSION:3.0','FN:Lorenzo Attinà','N:Attinà;Lorenzo;;;','TITLE:Consulente Commerciale','ORG:Pluriagency','TEL;TYPE=CELL:+393896881004','EMAIL:hello@pluriagency.com','URL:https://lo.pluriagency.com','END:VCARD'].join('\r\n');
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([vc],{type:'text/vcard'})),download:'Lorenzo_Attina.vcf'});
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 });
@@ -656,7 +661,7 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
   try {
     const cfg = await fetch('/api/config').then(r=>r.json());
     if(!cfg.supabaseUrl || !cfg.supabaseAnonKey) return;
-    const url = `${cfg.supabaseUrl}/rest/v1/lo_aziende?select=slug,nome,tag_line,lettera,colore_accento&attiva=eq.true&order=sort_order.asc`;
+    const url = `${cfg.supabaseUrl}/rest/v1/lo_aziende?select=slug,nome,tag_line,lettera,colore_accento,card_image_url&attiva=eq.true&order=sort_order.asc`;
     const res = await fetch(url, {
       headers: { apikey: cfg.supabaseAnonKey, Authorization: `Bearer ${cfg.supabaseAnonKey}` }
     });
@@ -669,6 +674,15 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
       const col = az.colore_accento || '#d4a843';
       const letra = az.lettera || az.nome[0].toUpperCase();
       const tag = az.tag_line ? az.tag_line.split('·')[0].trim() : '';
+      if(az.card_image_url){
+        return `<a class="az-tile rv in with-img" data-d="${delay}" href="/${az.slug}">
+          <img class="az-card-img" src="${_esc(az.card_image_url)}" alt="${_esc(az.nome)}" loading="lazy">
+          <div class="az-card-body">
+            <span class="az-tag">${_esc(tag)}</span>
+            <span class="az-name">${_esc(az.nome)}</span>
+          </div>
+        </a>`;
+      }
       return `<a class="az-tile rv in" data-d="${delay}" href="/${az.slug}">
         <div class="az-logo" style="background:${col}22;border-color:${col}44;color:${col}">${_esc(letra)}</div>
         <span class="az-tag">${_esc(tag)}</span>
