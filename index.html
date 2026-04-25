@@ -209,6 +209,7 @@ input::placeholder,textarea::placeholder{color:var(--muted2)}
 footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;text-align:center}
 .f-logo{font-family:var(--ff-d);font-size:1.1rem;font-weight:700;font-style:italic;color:var(--gold);margin-bottom:8px}
 .f-copy{font-size:11px;color:var(--muted2);letter-spacing:.06em}
+.f-legal{font-size:10px;color:var(--muted2);letter-spacing:.04em;margin-top:6px;opacity:.6}
 
 /* REVEAL */
 .rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
@@ -439,7 +440,7 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
       <h2 class="h2">Aziende <em>selezionate</em></h2>
       <p class="body-t" style="margin-top:14px;max-width:480px">Ogni settore è presidiato da un fornitore d'eccellenza, integrato in un approccio consulenziale strutturato per offrire alle imprese clienti soluzioni complete e coordinate.</p>
     </div>
-    <div class="az-grid">
+    <div class="az-grid" id="az-grid">
       <a class="az-tile rv" data-d="1" href="/tecnocart"><div class="az-logo">T</div><span class="az-tag">Imballaggi</span><span class="az-name">Tecnocart</span></a>
       <a class="az-tile rv" data-d="2" href="/mbm-project"><div class="az-logo">M</div><span class="az-tag">Saldatura</span><span class="az-name">MBM Project</span></a>
       <a class="az-tile rv" data-d="3" href="/emiltecnica"><div class="az-logo">E</div><span class="az-tag">DPI & Utensili</span><span class="az-name">EmilTecnica</span></a>
@@ -569,6 +570,7 @@ footer{background:#050608;border-top:1px solid var(--border);padding:32px 24px;t
 <footer>
   <div class="f-logo">Lorenzo Attinà</div>
   <div class="f-copy">© 2025 · Lorenzo Attinà · Consulenza Commerciale Multisettoriale</div>
+  <div class="f-legal">P.IVA 04129241206 · Via Calanchi 8, Anzola dell'Emilia (BO) · <a href="mailto:hello@pluriagency.com" style="color:inherit">hello@pluriagency.com</a></div>
 </footer>
 
 <script>
@@ -603,6 +605,34 @@ document.getElementById('vcardBtn').addEventListener('click',e=>{
 
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// Aziende grid — carica da Supabase, fallback al markup statico già presente
+(async function loadAziende(){
+  try {
+    const cfg = await fetch('/api/config').then(r=>r.json());
+    if(!cfg.supabaseUrl || !cfg.supabaseAnonKey) return;
+    const url = `${cfg.supabaseUrl}/rest/v1/lo_aziende?select=slug,nome,tag_line,lettera,colore_accento&attiva=eq.true&order=sort_order.asc`;
+    const res = await fetch(url, {
+      headers: { apikey: cfg.supabaseAnonKey, Authorization: `Bearer ${cfg.supabaseAnonKey}` }
+    });
+    if(!res.ok) return;
+    const aziende = await res.json();
+    if(!aziende || !aziende.length) return;
+    const grid = document.getElementById('az-grid');
+    grid.innerHTML = aziende.map((az, i) => {
+      const delay = (i % 4) + 1;
+      const col = az.colore_accento || '#d4a843';
+      const letra = az.lettera || az.nome[0].toUpperCase();
+      const tag = az.tag_line ? az.tag_line.split('·')[0].trim() : '';
+      return `<a class="az-tile rv in" data-d="${delay}" href="/${az.slug}">
+        <div class="az-logo" style="background:${col}22;border-color:${col}44;color:${col}">${_esc(letra)}</div>
+        <span class="az-tag">${_esc(tag)}</span>
+        <span class="az-name">${_esc(az.nome)}</span>
+      </a>`;
+    }).join('');
+  } catch(e){ /* silenzioso — il markup statico resta visibile */ }
+  function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+})();
 </script>
 </body>
 </html>
