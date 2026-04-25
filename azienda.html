@@ -122,10 +122,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:
 .c-view:hover{background:rgba(212,168,67,.22);border-color:var(--gold)}
 .c-view svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .catalogs-empty{text-align:center;padding:48px 24px;color:var(--muted2);font-size:13px;letter-spacing:.08em}
-.catalog-dl:hover{background:var(--gold-dim);border-color:rgba(212,168,67,.6)}
-
-/* empty catalogs */
-.catalogs-empty{text-align:center;padding:48px 24px;color:var(--muted2);font-size:13px;letter-spacing:.08em}
 
 /* CONTACT */
 .contact{background:var(--deep)}
@@ -390,6 +386,8 @@ async function loadAzienda(){
 
 // ===== CATALOGHI DA DRIVE =====
 function _normName(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+// Converte nome cartella Drive (es. "MBM_PROJECT") nello stesso slug usato nelle URL
+function _driveToSlug(s){ return String(s||'').toLowerCase().replace(/_/g,'-').replace(/[^a-z0-9-]/g,''); }
 
 function _renderCatalogCard(c){
   const thumb = c.anteprima_url || gdriveThumbnail(c.url);
@@ -421,7 +419,11 @@ async function loadDriveCatalogs(az){
     const res = await fetch('/api/catalogs');
     if(!res.ok) throw new Error();
     const { suppliers } = await res.json();
-    const match = (suppliers||[]).find(s => _normName(s.name) === _normName(az.nome));
+    // Priorità: match per slug (EMILTECNICA→emiltecnica, MBM_PROJECT→mbm-project)
+    // Fallback: match per nome normalizzato
+    const match = (suppliers||[]).find(s =>
+      _driveToSlug(s.name) === az.slug || _normName(s.name) === _normName(az.nome)
+    );
     const driveFiles = match ? match.files.map(f => ({ nome: f.name, url: f.url, anteprima_url: f.thumbnail, tipo: 'pdf' })) : [];
     const allCats = [...driveFiles, ...jsonbCats.filter(c => !driveFiles.some(d => d.url === c.url))];
 
