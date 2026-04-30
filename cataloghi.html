@@ -214,9 +214,12 @@ function nameToSlug(s){ return s.toLowerCase().replace(/_/g,'-').replace(/[^a-z0
         }
       } catch(e) {}
     }
-    // Filtra: mostra solo i fornitori il cui slug è tra quelli attivi
-    const filtered = activeSlugs
-      ? suppliers.filter(s => activeSlugs.has(nameToSlug(s.name)))
+    // Filtra: confronta rimuovendo i trattini da entrambi i lati
+    // (es. APPLEPROMO → "applepromo" == "apple-promo".replace(/-/g,'') → "applepromo")
+    const norm = s => s.replace(/-/g, '');
+    const normSlugs = activeSlugs ? new Set([...activeSlugs].map(norm)) : null;
+    const filtered = normSlugs
+      ? suppliers.filter(s => normSlugs.has(norm(nameToSlug(s.name))))
       : suppliers;
     if (!filtered.length) {
       root.innerHTML = renderError('Nessun catalogo disponibile al momento.');
