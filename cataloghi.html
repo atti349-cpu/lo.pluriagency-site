@@ -188,14 +188,41 @@ function nameToSlug(s){ return s.toLowerCase().replace(/_/g,'-').replace(/[^a-z0
 (async function loadCatalogs() {
   const root = document.getElementById('catalog-root');
   try {
-    const res = await fetch('/api/catalogs');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const { suppliers } = await res.json();
+    // Carica in parallelo: cataloghi Drive + aziende attive da Supabase
+    const [catalogRes, cfgRes] = await Promise.all([
+      fetch('/api/catalogs'),
+      fetch('/api/config')
+    ]);
+    if (!catalogRes.ok) throw new Error(`HTTP ${catalogRes.status}`);
+    const { suppliers } = await catalogRes.json();
     if (!suppliers || !suppliers.length) {
       root.innerHTML = renderError('Nessun catalogo trovato nella cartella Drive.');
       return;
     }
-    root.innerHTML = '<div style="padding:0 0 60px">' + suppliers.map(s => renderSupplier(s)).join('') + '</div>';
+    // Recupera gli slug delle aziende attive — se Supabase non risponde, mostra tutto
+    let activeSlugs = null;
+    if (cfgRes.ok) {
+      try {
+        const cfg = await cfgRes.json();
+        const sbRes = await fetch(
+          `${cfg.supabaseUrl}/rest/v1/lo_aziende?select=slug&attiva=eq.true`,
+          { headers: { apikey: cfg.supabaseAnonKey, Authorization: `Bearer ${cfg.supabaseAnonKey}` } }
+        );
+        if (sbRes.ok) {
+          const rows = await sbRes.json();
+          activeSlugs = new Set((rows || []).map(r => r.slug));
+        }
+      } catch(e) {}
+    }
+    // Filtra: mostra solo i fornitori il cui slug è tra quelli attivi
+    const filtered = activeSlugs
+      ? suppliers.filter(s => activeSlugs.has(nameToSlug(s.name)))
+      : suppliers;
+    if (!filtered.length) {
+      root.innerHTML = renderError('Nessun catalogo disponibile al momento.');
+      return;
+    }
+    root.innerHTML = '<div style="padding:0 0 60px">' + filtered.map(s => renderSupplier(s)).join('') + '</div>';
   } catch (e) {
     root.innerHTML = renderError('Impossibile caricare i cataloghi. Verifica la configurazione <strong>GOOGLE_API_KEY</strong> su Vercel.');
   }
