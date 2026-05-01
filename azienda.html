@@ -7,7 +7,9 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta id="page-desc" name="description" content="Scopri i prodotti e i cataloghi di questo fornitore rappresentato da Lorenzo Attinà.">
+<meta name="keywords" content="Lorenzo Attinà, agente commerciale Bologna, fornitore industriale, DPI, antinfortunistica, imballaggi, saldatura, abbigliamento professionale">
 <meta name="robots" content="index, follow">
+<link rel="canonical" href="https://lo.pluriagency.com/">
 <meta id="og-title" property="og:title" content="Azienda – Lorenzo Attinà">
 <meta id="og-desc" property="og:description" content="Scopri i prodotti e i cataloghi di questo fornitore rappresentato da Lorenzo Attinà.">
 <meta id="og-url" property="og:url" content="https://lo.pluriagency.com/">
@@ -306,6 +308,38 @@ function renderPage(az){
   _sm('og-url','content',_seoUrl);     _sm('og-image','content',_seoImg);
   _sm('tw-title','content',_seoTitle); _sm('tw-desc','content',_seoDesc);
   _sm('tw-image','content',_seoImg);
+
+  // Canonical dinamico
+  let _canon = document.querySelector('link[rel="canonical"]');
+  if(!_canon){ _canon = document.createElement('link'); _canon.rel='canonical'; document.head.appendChild(_canon); }
+  _canon.href = _seoUrl;
+
+  // JSON-LD strutturato per la pagina azienda
+  const _jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": az.nome,
+        "description": az.tag_line || az.descrizione || '',
+        "url": _seoUrl,
+        "image": _seoImg,
+        "isPartOf": { "@id": "https://lo.pluriagency.com/#org" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lo.pluriagency.com" },
+          { "@type": "ListItem", "position": 2, "name": "Aziende", "item": "https://lo.pluriagency.com/#aziende" },
+          { "@type": "ListItem", "position": 3, "name": az.nome, "item": _seoUrl }
+        ]
+      }
+    ]
+  };
+  const _ldEl = document.createElement('script');
+  _ldEl.type = 'application/ld+json';
+  _ldEl.text = JSON.stringify(_jsonLd);
+  document.head.appendChild(_ldEl);
 
   // Orbs
   document.getElementById('orb1').style.background = `radial-gradient(circle,${accent}28 0%,transparent 70%)`;
