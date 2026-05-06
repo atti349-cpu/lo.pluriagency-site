@@ -739,6 +739,12 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
     if(!res.ok) return;
     const aziende = await res.json();
     if(!aziende || !aziende.length) return;
+    // Aggiorna dropdown nav desktop con sole aziende attive
+    const navDrop = document.querySelector('.nav-drop-menu');
+    if(navDrop) navDrop.innerHTML = aziende.map(az =>
+      `<li><a href="/${_esc(az.slug)}">${_esc(az.nome)}</a></li>`
+    ).join('');
+
     const grid = document.getElementById('az-grid');
     grid.innerHTML = aziende.map((az, i) => {
       const delay = (i % 4) + 1;
